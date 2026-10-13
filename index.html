@@ -27,15 +27,15 @@ body{background:radial-gradient(ellipse at 50% -10%,#28245b 0,#0a0c1c 52%,#06071
   <div class="kiosk-head"><div class="kiosk-mark">KUJI<span>STATION</span></div><span class="kiosk-status">● ONLINE · DEMO</span></div>
   <div class="kiosk-intro"><span class="kicker">TODAY'S COLLECTION</span><h1>원하는 작품을 선택하고<br><em>행운의 쿠지</em>를 시작하세요.</h1><p>상품을 선택하면 등급과 남은 수량을 확인할 수 있습니다.</p></div>
   <div class="featured-frame">
-    <img id="featuredImg" src="https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg" alt="선택한 쿠지 상품 이미지">
+    <img id="featuredImg" alt="선택한 쿠지 상품 이미지">
     <div class="featured-shade"></div>
     <div class="featured-caption"><span class="live-tag">PICK UP</span><h2 id="featuredTitle">Hearts2Hearts</h2><p id="featuredDesc">PHOTO & GOODS COLLECTION</p></div>
   </div>
   <div class="collection-heading"><div><span class="kicker">SELECT A KUJI</span><h2>쿠지 라인업</h2></div><span class="scroll-hint">아래로 스크롤 ↓</span></div>
   <div class="kuji-list">
-    <button class="kuji-card selected" data-theme="h2h" type="button"><img src="https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg" alt="Hearts2Hearts"><span class="kuji-copy"><b>Hearts2Hearts</b><small>PHOTO & GOODS</small><span class="stock">총 60매 · 1회 ₩5,000</span></span><span class="card-arrow">›</span></button>
-    <button class="kuji-card" data-theme="tuide" type="button"><img src="https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png" alt="TUIDE"><span class="kuji-copy"><b>TUIDE</b><small>ALBUM & GOODS</small><span class="stock">총 60매 · 1회 ₩5,000</span></span><span class="card-arrow">›</span></button>
-    <button class="kuji-card" data-theme="goldkamuy" type="button"><img src="https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg" alt="골든카무이"><span class="kuji-copy"><b>골든카무이</b><small>ICHIBAN KUJI</small><span class="stock">총 60매 · 1회 ₩5,000</span></span><span class="card-arrow">›</span></button>
+    <button class="kuji-card selected" data-theme="h2h" type="button"><img alt="Hearts2Hearts"><span class="kuji-copy"><b>Hearts2Hearts</b><small>PHOTO & GOODS</small><span class="stock">총 60매 · 1회 ₩5,000</span></span><span class="card-arrow">›</span></button>
+    <button class="kuji-card" data-theme="tuide" type="button"><img alt="TUIDE"><span class="kuji-copy"><b>TUIDE</b><small>ALBUM & GOODS</small><span class="stock">총 60매 · 1회 ₩5,000</span></span><span class="card-arrow">›</span></button>
+    <button class="kuji-card" data-theme="goldkamuy" type="button"><img alt="골든카무이"><span class="kuji-copy"><b>골든카무이</b><small>ICHIBAN KUJI</small><span class="stock">총 60매 · 1회 ₩5,000</span></span><span class="card-arrow">›</span></button>
   </div>
   <div class="purchase-panel"><div class="purchase-title"><div><span class="kicker">YOUR TICKETS</span><h2>뽑을 수량 선택</h2></div><span class="demo-pill">가상 결제</span></div><div class="row"><span class="label">스크래치 수량</span><div class="qty"><button id="minus" type="button" aria-label="수량 줄이기">−</button><strong id="qty">5</strong><button id="plus" type="button" aria-label="수량 늘리기">+</button></div></div><div class="price-row"><span>예상 결제 금액</span><b id="total">₩ 25,000</b></div><p class="note">A상 1개 · B상 2개 · C상 4개 · D상 8개 · E상 15개 · F상 30개</p><button id="pay" class="start-btn" type="button"><span>시작하기</span><b>→</b></button></div>
 </section>
@@ -49,15 +49,16 @@ body{background:radial-gradient(ellipse at 50% -10%,#28245b 0,#0a0c1c 52%,#06071
 <div class="eyebrow">YOUR RESULTS</div><h2 class="title">당첨 결과</h2><p class="sub" id="summaryText"></p><div class="results" id="results"></div><button id="again" class="btn">처음으로 돌아가기</button>
 </section>
 </main>
+<script src="./images.js"></script>
 <script>
 const themes={h2h:{name:"Hearts2Hearts",short:"H2H"},tuide:{name:"TUIDE",short:"TUIDE"},goldkamuy:{name:"골든카무이",short:"GOLD KAMUY"}};
 const grades=[
-{key:"A",name:"A PRIZE",prize:{h2h:"스페셜 포토 굿즈",tuide:"스페셜 앨범 굿즈",goldkamuy:"스기모토 피규어"},count:1,file:{h2h:"https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg",tuide:"https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png",goldkamuy:"https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg"}},
-{key:"B",name:"B PRIZE",prize:{h2h:"포토카드 세트",tuide:"포토카드·포토북 세트",goldkamuy:"오가타 피규어"},count:2,file:{h2h:"https://media.ktown4u.com/products/resize/thumbnail/2026/06/29/AH6JfX.png",tuide:"https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png",goldkamuy:"https://actionfigurebrasil.com.br/cdn/shop/files/golden-kamuy-ogata-hyakunosuke-ichiban-kuji-ichiban-kuji-golden-kamuy-kinkai-soudatsusen-b-prize-masterlise-bandai-spirits-actionfigurebrasil-01_1024x1024.webp?v=1774221274"}},
-{key:"C",name:"C PRIZE",prize:{h2h:"아크릴 키링",tuide:"미니 굿즈",goldkamuy:"보타로 피규어"},count:4,file:{h2h:"https://kplaceshop.com/cdn/shop/files/hearts2hearts-acrylic-keyring-2nd-mini-album-lemon-tang-pop-up-official-md-carmen-ver-main-image_600x.png?v=1783013031",tuide:"https://cdn.shopify.com/s/files/1/0675/8105/1017/files/1000016904_detail_044.jpg?v=1785782781&width=1500",goldkamuy:"https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg"}},
-{key:"D",name:"D PRIZE",prize:{h2h:"포토 굿즈",tuide:"앨범·일러스트 굿즈",goldkamuy:"일러스트 보드"},count:8,file:{h2h:"https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg",tuide:"https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png",goldkamuy:"https://jumpichiban.com/cdn/shop/files/IchibanKujiGoldenKamuyGoldNuggetScramble-IPrizeVisualSheetCompleteSetof12_7.webp?v=1774572893&width=1000"}},
-{key:"E",name:"E PRIZE",prize:{h2h:"랜덤 스티커·소품",tuide:"랜덤 스티커·포토 소품",goldkamuy:"초코놋코 미니 피규어"},count:15,file:{h2h:"https://media.ktown4u.com/products/resize/thumbnail/2026/06/29/AH6JfX.png",tuide:"https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png",goldkamuy:"https://pbs.twimg.com/media/HEFQfc8bsAATsES.jpg"}},
-{key:"F",name:"F PRIZE",prize:{h2h:"데일리 굿즈",tuide:"데일리 굿즈",goldkamuy:"유리 제품"},count:30,file:{h2h:"https://kplaceshop.com/cdn/shop/files/hearts2hearts-acrylic-keyring-2nd-mini-album-lemon-tang-pop-up-official-md-carmen-ver-main-image_600x.png?v=1783013031",tuide:"https://cdn-contents.weverseshop.io/public/shop/0d88dca6eb62e72c3bce249e096fe372.png",goldkamuy:"https://pbs.twimg.com/media/HEFQet5aoAAmwon.jpg"}}
+{key:"A",name:"A PRIZE",prize:{h2h:"스페셜 포토 굿즈",tuide:"스페셜 앨범 굿즈",goldkamuy:"스기모토 피규어"},count:1,file:window.KUJI_IMAGES.prizes.A},
+{key:"B",name:"B PRIZE",prize:{h2h:"포토카드 세트",tuide:"포토카드·포토북 세트",goldkamuy:"오가타 피규어"},count:2,file:window.KUJI_IMAGES.prizes.B},
+{key:"C",name:"C PRIZE",prize:{h2h:"아크릴 키링",tuide:"미니 굿즈",goldkamuy:"보타로 피규어"},count:4,file:window.KUJI_IMAGES.prizes.C},
+{key:"D",name:"D PRIZE",prize:{h2h:"포토 굿즈",tuide:"앨범·일러스트 굿즈",goldkamuy:"일러스트 보드"},count:8,file:window.KUJI_IMAGES.prizes.D},
+{key:"E",name:"E PRIZE",prize:{h2h:"랜덤 스티커·소품",tuide:"랜덤 스티커·포토 소품",goldkamuy:"초코놋코 미니 피규어"},count:15,file:window.KUJI_IMAGES.prizes.E},
+{key:"F",name:"F PRIZE",prize:{h2h:"데일리 굿즈",tuide:"데일리 굿즈",goldkamuy:"유리 제품"},count:30,file:window.KUJI_IMAGES.prizes.F}
 ];
 let theme="h2h",qty=5,inventory=[],purchased=0,results=[],current=null,idx=0,ctx=null,down=false,last=null,checked=false;
 const $=id=>document.getElementById(id), won=n=>"₩ "+n.toLocaleString("ko-KR");
@@ -66,8 +67,8 @@ function themePlaceholder(t){const data={h2h:{label:"Hearts2Hearts",sub:"PHOTO &
 function guardImage(img,fallback){img.onerror=()=>{img.onerror=null;img.src=fallback};}
 function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");window.scrollTo(0,0)}
 function update(){ $("qty").textContent=qty;if($("unit"))$("unit").textContent=won(5000);$("total").textContent=won(qty*5000);$("pay").textContent=won(qty*5000)+" 가상 결제하기";document.querySelectorAll(".theme").forEach(b=>b.classList.toggle("selected",b.dataset.theme===theme));}
-function updateFeatured(){const t=themes[theme];const first=grades.find(g=>g.file[theme]);const img=$("featuredImg");guardImage(img,themePlaceholder(theme));img.src=first.file[theme]||themePlaceholder(theme);$("featuredTitle").textContent=t.name;$("featuredDesc").textContent=theme==="goldkamuy"?"ICHIBAN KUJI COLLECTION":theme==="tuide"?"ALBUM & GOODS COLLECTION":"PHOTO & GOODS COLLECTION";document.querySelectorAll(".kuji-card").forEach(b=>{b.classList.toggle("selected",b.dataset.theme===theme);const cardImg=b.querySelector("img");guardImage(cardImg,themePlaceholder(b.dataset.theme));if(!cardImg.complete||cardImg.naturalWidth===0)cardImg.src=cardImg.dataset.fallback||cardImg.src;})}
-document.querySelectorAll(".kuji-card").forEach(b=>{const im=b.querySelector("img");im.dataset.fallback=themePlaceholder(b.dataset.theme);guardImage(im,im.dataset.fallback);b.onclick=()=>{theme=b.dataset.theme;update();updateFeatured()}});
+function updateFeatured(){const t=themes[theme];const first=grades.find(g=>g.file[theme]);const img=$("featuredImg");guardImage(img,themePlaceholder(theme));img.src=window.KUJI_IMAGES.covers[theme]||themePlaceholder(theme);$("featuredTitle").textContent=t.name;$("featuredDesc").textContent=theme==="goldkamuy"?"ICHIBAN KUJI COLLECTION":theme==="tuide"?"ALBUM & GOODS COLLECTION":"PHOTO & GOODS COLLECTION";document.querySelectorAll(".kuji-card").forEach(b=>{b.classList.toggle("selected",b.dataset.theme===theme);const cardImg=b.querySelector("img");const cardTheme=b.dataset.theme;cardImg.dataset.fallback=themePlaceholder(cardTheme);guardImage(cardImg,cardImg.dataset.fallback);cardImg.src=window.KUJI_IMAGES.covers[cardTheme]||cardImg.dataset.fallback;})}
+document.querySelectorAll(".kuji-card").forEach(b=>{b.onclick=()=>{theme=b.dataset.theme;update();updateFeatured()}});
 $("minus").onclick=()=>{qty=Math.max(1,qty-1);update()};$("plus").onclick=()=>{qty=Math.min(10,qty+1);update()};
 function makeInventory(){let a=[];grades.forEach(g=>{for(let i=0;i<g.count;i++)a.push(g)});for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 $("pay").onclick=()=>{inventory=makeInventory();purchased=qty;results=[];idx=0;begin();};
