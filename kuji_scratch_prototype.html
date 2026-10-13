@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>KUJI — Scratch Prototype</title>
+<style>
+:root{font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;color:#22212a;background:#f7f5f9}
+*{box-sizing:border-box}body{margin:0;padding:24px 16px 40px;overscroll-behavior:none}button{font:inherit;cursor:pointer;touch-action:manipulation}
+.app{max-width:520px;margin:auto}.eyebrow{font-size:10px;letter-spacing:.22em;color:#8c7ca2;font-weight:800}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.head h1{font-size:28px;letter-spacing:-1.2px;margin:5px 0 0}.demo{font-size:11px;border:1px solid #e3deea;border-radius:99px;padding:7px 10px;background:#fff}
+.themes{display:flex;gap:8px;overflow:auto;padding:0 0 12px;margin-bottom:14px}.themebtn{padding:9px 12px;border:1px solid #dedde4;border-radius:99px;font-size:12px;white-space:nowrap;background:#fff;color:#444}.themebtn.active{background:#20202a;color:#fff;border-color:#20202a}
+.info{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:12px}.info h2{font-size:13px;margin:0}.muted{font-size:12px;color:#817c89;margin-top:5px}.right{text-align:right;white-space:nowrap}.remaining{font-size:20px;font-weight:800;margin-top:3px}.progress{height:4px;border-radius:9px;background:#e9e6ed;overflow:hidden;margin-bottom:16px}.progress>div{height:100%;background:#9b81c8;transition:width .2s}
+.ticket{position:relative;overflow:hidden;border-radius:20px;aspect-ratio:.79;background:#f9f1e9;border:1px solid #e1d6ca;box-shadow:0 12px 30px #24202a15;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+#prize-art{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:22px;background:linear-gradient(150deg,#fce5ee,#d9dafa)}
+.pill{font-size:10px;letter-spacing:.14em;border:1px solid #ffffff90;padding:5px 9px;border-radius:99px}.symbol{font-size:38px;line-height:1.2;margin-top:20px}.grade{font-size:62px;line-height:1;font-weight:900;letter-spacing:-.06em;margin-top:18px;transition:transform .18s}.label{font-size:11px;font-weight:800;letter-spacing:.12em;margin-top:12px}.illustration{font-size:48px;margin-top:22px}.prizename{font-size:14px;font-weight:750;margin-top:12px}.sub{font-size:11px;color:#817987;margin-top:8px}
+#scratch{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}
+.meta{display:flex;justify-content:space-between;margin:11px 0 8px;font-size:12px;color:#817c89}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px}.primary,.secondary{border-radius:12px;padding:13px 12px;font-size:13px;font-weight:700}.primary{background:#22212a;color:white;border:1px solid #22212a}.secondary{background:white;border:1px solid #dedde4;color:#333}.message{text-align:center;min-height:22px;font-size:13px;font-weight:650;color:#8b70ad;margin:13px 0 22px}
+.panel{background:#fff;border:1px solid #eeeaf2;border-radius:16px;padding:16px;margin-top:16px}.panelhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:13px;font-weight:800}.tiny{font-size:11px;color:#918a99;font-weight:400}.counts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.count{border:1px solid #e9e5ee;border-radius:10px;padding:10px}.count .g{font-size:11px;color:#81798a}.count .n{font-size:19px;font-weight:850;margin-top:2px}.count .n span{font-size:10px;font-weight:400;color:#999}.history{display:flex;flex-wrap:wrap;gap:7px}.chip{padding:8px 10px;background:#fff;border:1px solid #e9e6ee;border-radius:10px;font-size:12px}.foot{font-size:11px;line-height:1.6;color:#99939f;margin:16px 2px}
+@media(min-width:600px){body{padding-top:36px}.ticket{max-height:620px}.app{background:#fff;padding:24px;border-radius:24px;box-shadow:0 15px 60px #2820320b}.themes{margin-top:6px}}
+</style>
+</head>
+<body>
+<main class="app" id="app">
+ <header class="head"><div><div class="eyebrow">DIGITAL ICHIBAN KUJI</div><h1>Scratch to reveal.</h1></div><span class="demo">PLAY DEMO</span></header>
+ <nav class="themes" id="themes"><button class="themebtn active" data-theme="h2h">♡ Hearts2Hearts</button><button class="themebtn" data-theme="tuide">✳ TUIDE</button><button class="themebtn" data-theme="gk">✦ GOLDEN KAMUY</button></nav>
+ <section class="info"><div><h2 id="set-name">HEARTS2HEARTS COLLECTION</h2><div class="muted">한 장을 긁어 경품을 확인해 봐.</div></div><div class="right"><div class="muted">남은 티켓</div><div class="remaining" id="remaining">60 / 60</div></div></section>
+ <div class="progress"><div id="progressbar" style="width:100%"></div></div>
+ <div class="ticket" id="ticket"><div id="prize-art"><div class="pill" id="prize-top">SPECIAL COLLECTION</div><div class="symbol" id="prize-symbol">♡ ✧ ♡</div><div class="grade" id="prize-grade" style="color:#8b69a6">A賞</div><div class="label" id="prize-label">단체 스페셜 포토</div><div class="illustration" id="prize-illustration">♡ ✧</div><div class="prizename" id="prize-name">A상 · 단체 스페셜 포토</div><div class="sub" id="prize-sub">SCRATCH TO REVEAL</div></div><canvas id="scratch" aria-label="손가락으로 드래그해 코팅을 긁어 경품 공개"></canvas></div>
+ <div class="meta"><span id="scratch-hint">손가락으로 문질러 긁어보세요 ↗</span><span id="scratch-percent">0% 공개</span></div><div class="progress"><div id="scratch-progress" style="width:0%"></div></div>
+ <div class="buttons"><button class="primary" id="reveal-btn">✦ 전부 긁어서 공개</button><button class="secondary" id="next-btn">다음 쿠지 뽑기 ↻</button></div>
+ <div class="message" id="result-message" aria-live="polite">표면을 긁으면 결과가 공개돼.</div>
+ <section class="panel"><div class="panelhead"><span>COLLECTION / 등급별 잔여 수량</span><span class="tiny">A–F</span></div><div class="counts" id="prize-counts"></div></section>
+ <section class="panel"><div class="panelhead"><span>획득 기록</span><span class="tiny">THIS SESSION</span></div><div class="history" id="history"><span class="muted">아직 뽑은 경품이 없어.</span></div></section>
+ <p class="foot">프로토타입 · 임의의 데모 경품과 수량을 사용해. 실제 아티스트의 공식 굿즈 이미지가 아닌 테마 그래픽이야. 작품별 쿠지는 서로 독립적으로 진행돼.</p>
+</main>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const themes={
+h2h:{name:'HEARTS2HEARTS COLLECTION',top:'SPECIAL COLLECTION',symbols:['♡','✧','♥','✿','◇','♡'],colors:['#8b69a6','#ce8cab','#a58ad1','#c68aab','#a9a2c8','#d3a0b9'],bg:['linear-gradient(150deg,#fce5ee,#d9dafa)','linear-gradient(150deg,#f8dce8,#f2d8f8)','linear-gradient(150deg,#e9e0ff,#fbd9e9)'],labels:['단체 스페셜 포토','멤버 스페셜 포토','페어 콘셉트 포토','미니 포토','로고 모티프 카드','심볼 스티커'],coat:['#e8d7ef','#d7d5e5','#ead4df']},
+tuide:{name:'TUIDE COLLECTION',top:'THE IDOL ARCHIVE',symbols:['✳','✦','✧','❋','✷','✳'],colors:['#b86b85','#cd8a72','#ba8ab6','#d5a06d','#8f9bbf','#d1a0b5'],bg:['linear-gradient(145deg,#fbe0e5,#dcd9f9)','linear-gradient(145deg,#f4d9e8,#f5e4c8)','linear-gradient(145deg,#dce9fa,#f9dfeb)'],labels:['단체 스페셜 포토','멤버 스페셜 포토','페어 콘셉트 포토','미니 포토','앨범 모티프 카드','이름·심볼 스티커'],coat:['#e4d4e2','#d9d8e9','#f0d7d9']},
+gk:{name:'GOLDEN KAMUY ARCHIVE',top:'HIDDEN ARCHIVE',symbols:['✦','❖','✥','⌘','✧','✦'],colors:['#967343','#a87943','#a88960','#8e846d','#b49b71','#a39a80'],bg:['linear-gradient(145deg,#f0dfb9,#c7b18a)','linear-gradient(145deg,#e8d4a9,#d5c5a4)','linear-gradient(145deg,#eee4c8,#c7bfa8)'],labels:['아카이브 스페셜 일러스트','캐릭터 포스터','명장면 기록 카드','미니 캐릭터 카드','명대사·소품 기록','엠블럼·상징 스티커'],coat:['#c4b59a','#d2c4a8','#b6ad99']}
+};
+const grades=['A','B','C','D','E','F'],base=[1,2,4,8,15,30];
+let theme='h2h',remaining={},history=[],current=null,revealed=false,drawing=false,last=null,w=0,h=0;
+const canvas=$('scratch'),ctx=canvas.getContext('2d',{willReadFrequently:true});
+function setTheme(t){theme=t;remaining[t]=remaining[t]||[...base];document.querySelectorAll('.themebtn').forEach(b=>b.classList.toggle('active',b.dataset.theme===t));$('set-name').textContent=themes[t].name;$('result-message').textContent='표면을 긁으면 결과가 공개돼.';newTicket();renderCounts();renderHistory()}
+function choose(){let a=remaining[theme],sum=a.reduce((x,y)=>x+y,0);if(!sum)return null;let r=Math.random()*sum;for(let i=0;i<a.length;i++){r-=a[i];if(r<0){a[i]--;return i}}return 5}
+function newTicket(){if(remaining[theme].reduce((x,y)=>x+y,0)<=0){current=null;revealed=true;$('result-message').textContent='이 세트의 티켓을 모두 뽑았어. 다른 작품을 선택해 봐.';resize();renderCounts();return}
+current=choose();revealed=false;let th=themes[theme],i=current;$('prize-top').textContent=th.top;$('prize-symbol').textContent=th.symbols[i];$('prize-grade').textContent=grades[i]+'賞';$('prize-grade').style.color=th.colors[i];$('prize-grade').style.transform='scale(1)';$('prize-label').textContent=th.labels[i];$('prize-illustration').textContent=th.symbols[i]+' '+(i<2?'✧':'◇');$('prize-name').textContent=grades[i]+'상 · '+th.labels[i];$('prize-sub').textContent='SCRATCH TO REVEAL';$('prize-art').style.background=th.bg[i%th.bg.length];$('scratch-hint').textContent='손가락으로 문질러 긁어보세요 ↗';$('scratch-percent').textContent='0% 공개';$('scratch-progress').style.width='0%';$('result-message').textContent='결과는 이미 정해져 있어. 코팅을 긁어 공개해 봐.';resize();renderCounts()}
+function resize(){let r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;let d=Math.min(devicePixelRatio||1,2);w=r.width;h=r.height;canvas.width=Math.round(w*d);canvas.height=Math.round(h*d);ctx.setTransform(d,0,0,d,0,0);if(!revealed)drawCoat();else ctx.clearRect(0,0,w,h)}
+function drawCoat(){let th=themes[theme];ctx.globalCompositeOperation='source-over';ctx.clearRect(0,0,w,h);let g=ctx.createLinearGradient(0,0,w,h);g.addColorStop(0,th.coat[0]);g.addColorStop(.24,'#f7f2e9');g.addColorStop(.48,th.coat[1]);g.addColorStop(.69,'#f0e8db');g.addColorStop(1,th.coat[2]);ctx.fillStyle=g;ctx.fillRect(0,0,w,h);ctx.save();ctx.globalAlpha=.22;for(let y=0;y<h;y+=7){ctx.strokeStyle=y%14?'#fff':'#8d7f76';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}ctx.restore();ctx.strokeStyle='#ffffffb8';ctx.lineWidth=1.3;ctx.strokeRect(13,13,w-26,h-26);ctx.textAlign='center';ctx.fillStyle='#625b5a';ctx.font='700 11px sans-serif';ctx.fillText('KUJI / '+theme.toUpperCase(),w/2,h*.34);ctx.font='800 25px sans-serif';ctx.fillText('SCRATCH ME',w/2,h*.47);ctx.font='11px sans-serif';ctx.fillText('✦   ✧   ✦   ✧   ✦',w/2,h*.54);ctx.font='10px sans-serif';ctx.fillText('DRAG TO REVEAL YOUR PRIZE',w/2,h*.65)}
+function point(e){let r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
+function erase(p){ctx.save();ctx.globalCompositeOperation='destination-out';ctx.beginPath();ctx.arc(p.x,p.y,19,0,Math.PI*2);ctx.fill();if(last){ctx.lineWidth=38;ctx.lineCap='round';ctx.lineJoin='round';ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(p.x,p.y);ctx.stroke()}ctx.restore();last=p}
+function percent(){let data=ctx.getImageData(0,0,canvas.width,canvas.height).data,total=0,clear=0;for(let i=3;i<data.length;i+=4*24){total++;if(data[i]<20)clear++}return Math.round(clear/Math.max(total,1)*100)}
+function down(e){if(revealed||current===null)return;e.preventDefault();drawing=true;document.body.style.overscrollBehavior='none';last=null;try{canvas.setPointerCapture(e.pointerId)}catch{}erase(point(e))}
+function move(e){if(!drawing)return;e.preventDefault();erase(point(e))}
+function up(e){if(!drawing)return;if(e&&e.cancelable)e.preventDefault();drawing=false;document.body.style.overscrollBehavior='';last=null;let p=percent();$('scratch-percent').textContent=p+'% 공개';$('scratch-progress').style.width=p+'%';if(p>=18)reveal()}
+function reveal(){if(revealed||current===null)return;revealed=true;ctx.clearRect(0,0,w,h);let i=current;history.unshift({theme,grade:grades[i],label:themes[theme].labels[i]});if(history.length>18)history.pop();$('scratch-hint').textContent='공개 완료';$('scratch-percent').textContent='100% 공개';$('scratch-progress').style.width='100%';$('result-message').textContent=grades[i]+'상 획득! '+themes[theme].labels[i];$('prize-sub').textContent='✦ PRIZE REVEALED ✦';$('prize-grade').style.transform='scale(1.12)';renderCounts();renderHistory()}
+// Pointer Events first; explicit non-passive touch fallback for iOS webviews/file previews.
+canvas.addEventListener('pointerdown',down,{passive:false});
+canvas.addEventListener('pointermove',move,{passive:false});
+canvas.addEventListener('pointerup',up,{passive:false});
+canvas.addEventListener('pointercancel',up,{passive:false});
+let touchActive=false;
+canvas.addEventListener('touchstart',e=>{if(revealed||current===null)return;e.preventDefault();touchActive=true;drawing=true;last=null;const t=e.changedTouches[0];erase(point({clientX:t.clientX,clientY:t.clientY}));},{passive:false});
+canvas.addEventListener('touchmove',e=>{if(!touchActive||!drawing)return;e.preventDefault();const t=e.changedTouches[0];erase(point({clientX:t.clientX,clientY:t.clientY}));},{passive:false});
+function endTouch(e){if(!touchActive)return;e.preventDefault();touchActive=false;up(e)}
+canvas.addEventListener('touchend',endTouch,{passive:false});
+canvas.addEventListener('touchcancel',endTouch,{passive:false});
+document.addEventListener('touchmove',e=>{if(drawing)e.preventDefault()},{passive:false});
+$('reveal-btn').addEventListener('click',reveal);$('next-btn').addEventListener('click',()=>{if(current!==null&&!revealed){$('result-message').textContent='먼저 티켓을 긁어 결과를 공개해 봐.';return}newTicket()});
+$('themes').addEventListener('click',e=>{let b=e.target.closest('[data-theme]');if(b)setTheme(b.dataset.theme)});
+function renderCounts(){let a=remaining[theme]||base,total=a.reduce((x,y)=>x+y,0);$('remaining').textContent=total+' / 60';$('progressbar').style.width=total/60*100+'%';$('prize-counts').innerHTML=grades.map((g,i)=>`<div class="count"><div class="g">${g}상</div><div class="n">${a[i]}<span> / ${base[i]}</span></div></div>`).join('')}
+function renderHistory(){let arr=history.filter(x=>x.theme===theme);$('history').innerHTML=arr.length?arr.map(x=>`<span class="chip">${x.grade}상 · ${x.label}</span>`).join(''):'<span class="muted">이 작품에서 아직 뽑은 경품이 없어.</span>'}
+if('ResizeObserver'in window)new ResizeObserver(resize).observe($('ticket'));else window.addEventListener('resize',resize);setTheme('h2h');
+})();
+</script>
+</body>
+</html>
