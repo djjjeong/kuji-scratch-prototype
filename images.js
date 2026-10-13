@@ -13,7 +13,7 @@ window.KUJI_IMAGES = {
   // 첫 화면 대표 이미지와 작품별 카드 이미지
   covers: {
     h2h: "https://i.namu.wiki/i/2ZtiTWq8hkjJfjC0dWlf3AvhYkjJH3h1QdBuPN_fzmogtYwsleqALb_1bgIKV4qPi6pf-u0zAn1i5wp1a2A9Dw.webp", // Hearts2Hearts
-    tuide: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png", // TUIDE
+    tuide: "https://i.namu.wiki/i/1qBrISPkirbOV5srCae76MYhZkuJS-NgBQPYcKg-GUpDpt6TAo2y54TWb4gUFAOoTxx7sDlWcQWg6o89rAk8fA.webp", // TUIDE
     goldkamuy: "https://www.hakodate.travel/kr/wp-content/uploads/2026/04/20260401_PERMIT_HAKOSIN-1-1536x864.webp" // 골든카무이
   },
 
