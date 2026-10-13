@@ -2,83 +2,1073 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KUJI SCRATCH — Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>KUJI SCRATCH</title>
 <style>
-:root{--ink:#22211f;--muted:#77716b;--paper:#f7f4ef;--card:#fffdfa;--line:#e5ded4;--accent:#ed6379}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.app{max-width:520px;margin:auto;min-height:100vh;padding:20px 16px 40px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.brand{font-size:12px;font-weight:900;letter-spacing:.15em}.pill{font-size:11px;border:1px solid var(--line);padding:7px 10px;border-radius:99px;color:var(--muted)}
-.eyebrow{font-size:11px;color:var(--accent);letter-spacing:.15em;font-weight:800}.hero h1{font-size:32px;line-height:1.1;letter-spacing:-.04em;margin:8px 0}.sub{font-size:14px;line-height:1.6;color:var(--muted)}.themes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}.theme{background:white;border:1px solid var(--line);border-radius:14px;padding:13px 7px;text-align:left;min-height:80px}.theme.selected{border:2px solid var(--accent);background:#fff0f2;padding:12px 6px}.theme b{font-size:12px}.theme small{display:block;color:var(--muted);margin-top:5px;font-size:10px}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px;margin-top:12px}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.label{font-size:13px;color:var(--muted)}.price{font-size:23px;font-weight:900}.qty{display:flex;align-items:center;gap:18px}.qty button{width:35px;height:35px;border:1px solid var(--line);border-radius:50%;background:white;font-size:20px}.qty strong{font-size:20px}.btn{width:100%;border:0;border-radius:13px;padding:15px;font-weight:800;margin-top:14px;background:var(--ink);color:white}.btn.secondary{background:#eee9e1;color:var(--ink);margin-top:8px}.screen{display:none}.screen.active{display:block}.title{font-size:27px;line-height:1.2;margin:6px 0 10px;letter-spacing:-.04em}.note{font-size:12px;color:var(--muted);line-height:1.5}.prize-img{width:100%;height:290px;object-fit:contain;background:#fff;border-radius:14px;border:1px solid var(--line)}.scratchbox{position:relative;margin-top:12px}.scratchbox img{display:block;width:100%;height:280px;object-fit:contain;background:#fff;border-radius:15px}.scratchbox canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;border-radius:15px;z-index:2}.tag{display:inline-block;border-radius:99px;background:#f4d9de;padding:6px 10px;font-size:11px;font-weight:900}.results{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.result{border:1px solid var(--line);background:white;border-radius:13px;padding:9px}.result img{width:100%;height:145px;object-fit:contain}.result b{font-size:12px;display:block;margin:5px 0}.toast{font-size:12px;color:#28744a;margin-top:8px}
+:root {
+  --ink: #f7f4ff;
+  --muted: #9aa1bc;
+  --paper: #090b19;
+  --card: #14182d;
+  --line: #303554;
+  --accent: #ffdc38;
+  --orange: #ff7300;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: radial-gradient(ellipse at 50% -10%, #242050 0%, #0a0c1c 55%, #060711 100%);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+  min-height: 100vh;
+}
+.app {
+  max-width: 480px;
+  margin: auto;
+  min-height: 100vh;
+  padding: 12px 12px 32px;
+}
 
-/* Kiosk-inspired collection selector */
-:root{--ink:#f7f4ff;--muted:#b9bdd0;--paper:#090b19;--card:#14182d;--line:#343957;--accent:#ffdc38}
-body{background:radial-gradient(ellipse at 50% -10%,#28245b 0,#0a0c1c 52%,#060711 100%);color:var(--ink)}
-.app{max-width:520px;padding:18px 15px 38px}.top{margin-bottom:0;padding-bottom:12px;border-bottom:1px solid #333650}.brand{font-size:12px;letter-spacing:.19em;color:#fff}.pill{border-color:#444863;color:#c7c9d8;background:#171a2b}
-.kiosk-home{padding-top:14px}.kiosk-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.kiosk-mark{font-size:19px;letter-spacing:.1em;font-weight:1000;font-style:italic}.kiosk-mark span{display:block;font-size:8px;letter-spacing:.32em;color:#8b91b4;margin-top:2px}.kiosk-status{font-size:9px;color:#b4f4d4;letter-spacing:.08em;border:1px solid #315b55;background:#122b2b;border-radius:30px;padding:7px 9px}.kiosk-intro .kicker,.kicker{display:block;font-size:10px;letter-spacing:.2em;font-weight:900;color:#91a1ff}.kiosk-intro h1{font-size:27px;line-height:1.3;letter-spacing:-.05em;margin:8px 0 7px}.kiosk-intro h1 em{font-style:normal;color:var(--accent)}.kiosk-intro p{font-size:12px;line-height:1.6;color:#aeb3ca;margin:0 0 17px}.featured-frame{height:235px;position:relative;overflow:hidden;border:2px solid #6575ff;border-radius:15px;background:#19172e;box-shadow:0 0 0 4px #20274d,0 0 24px #5368ff40}.featured-frame img{width:100%;height:100%;object-fit:cover;display:block;opacity:.88}.featured-shade{position:absolute;inset:0;background:linear-gradient(0deg,#080a19 0%,rgba(8,10,25,.65) 26%,transparent 76%),linear-gradient(90deg,#10132b44,transparent)}.featured-caption{position:absolute;left:16px;right:14px;bottom:15px}.live-tag{display:inline-block;background:var(--accent);color:#11152b;border-radius:4px;padding:4px 7px;font-size:9px;font-weight:1000;letter-spacing:.1em}.featured-caption h2{font-size:23px;margin:7px 0 2px;letter-spacing:-.04em}.featured-caption p{font-size:10px;letter-spacing:.14em;margin:0;color:#d0d5f4;font-weight:800}.collection-heading{display:flex;justify-content:space-between;align-items:end;margin:25px 2px 11px}.collection-heading h2,.purchase-title h2{font-size:19px;margin:4px 0 0}.scroll-hint{font-size:10px;color:#9096b4}.kuji-list{display:flex;flex-direction:column;gap:10px}.kuji-card{width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:9px;border:1px solid #343957;border-radius:12px;background:linear-gradient(105deg,#191d36,#101326);color:#f8f7ff;min-height:105px;position:relative;overflow:hidden}.kuji-card.selected{border:2px solid #8290ff;padding:8px;background:linear-gradient(105deg,#262c58,#151a32);box-shadow:0 0 15px #526aff24}.kuji-card img{width:106px;height:83px;object-fit:cover;border-radius:7px;background:#242844;flex-shrink:0}.kuji-copy{display:flex;flex-direction:column;align-items:flex-start;min-width:0;gap:4px}.kuji-copy b{font-size:14px}.kuji-copy small{font-size:9px;letter-spacing:.09em;color:#aab2e7}.kuji-copy .stock{font-size:10px;color:#d5d8e8;margin-top:5px}.card-arrow{margin-left:auto;align-self:center;font-size:28px;color:var(--accent);padding:0 5px}.purchase-panel{margin-top:18px;padding:16px;border:1px solid #394064;border-radius:15px;background:linear-gradient(145deg,#1a1e39,#111426);box-shadow:0 12px 35px #0004}.purchase-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.demo-pill{font-size:10px;color:#d7dcff;border:1px solid #454d78;border-radius:20px;padding:6px 9px}.purchase-panel .row{padding-bottom:13px;border-bottom:1px solid #303550}.purchase-panel .label{color:#b7bdd7}.qty{gap:15px}.qty button{background:#252b4c;color:white;border-color:#444b72}.qty strong{min-width:15px;text-align:center}.price-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px}.price-row span{font-size:12px;color:#b7bdd7}.price-row b{font-size:22px;color:var(--accent)}.purchase-panel .note{color:#9fa6c2;font-size:10px;margin:13px 0}.start-btn{width:100%;display:flex;justify-content:center;align-items:center;position:relative;border:0;border-radius:40px;padding:14px 18px;background:linear-gradient(#ffef6b,#ffd51b);color:#19182a;font-size:15px;font-weight:1000;box-shadow:0 4px 0 #b88c08,0 0 18px #ffdc3840}.start-btn b{position:absolute;right:19px;font-size:20px}.start-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #b88c08}
-/* Keep the scratch and result screens readable in the dark kiosk theme. */
-#scratch .title,#summary .title{color:#fff}#scratch .sub,#summary .sub{color:#b9bdd0}.scratchbox img{background:#fff}.tag{background:#3a3151;color:#fff}.panel{background:#14182d;border-color:#343957}.result{background:#14182d;border-color:#343957;color:#fff}.btn{background:var(--accent);color:#17182a}.btn:disabled{opacity:.45}
-@media(max-width:380px){.featured-frame{height:205px}.kuji-card img{width:88px;height:76px}.kiosk-intro h1{font-size:24px}}
+/* Header */
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #282d49;
+  margin-bottom: 12px;
+}
+.brand {
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  color: #fff;
+}
+.top-actions {
+  display: flex;
+  gap: 6px;
+}
+.pill {
+  font-size: 11px;
+  border: 1px solid #3d4366;
+  padding: 5px 10px;
+  border-radius: 99px;
+  color: #c7c9d8;
+  background: #14182d;
+  cursor: pointer;
+}
+.pill.board-btn {
+  background: linear-gradient(135deg, #2b1f54, #191c3d);
+  border-color: #6956cc;
+  color: #ffe899;
+  font-weight: 800;
+}
+
+/* Screens */
+.screen { display: none; }
+.screen.active { display: block; animation: fadeIn .2s ease-out; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Home Screen */
+.kiosk-intro {
+  margin: 10px 0 12px;
+}
+.kiosk-intro h1 {
+  font-size: 21px;
+  line-height: 1.25;
+  letter-spacing: -.03em;
+}
+.kiosk-intro h1 em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.featured-frame {
+  height: 175px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #5868e8;
+  border-radius: 14px;
+  background: #14182d;
+  box-shadow: 0 0 20px rgba(88, 104, 232, 0.2);
+  cursor: pointer;
+}
+.featured-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.featured-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, #090b19 0%, rgba(9, 11, 25, .6) 30%, transparent 75%);
+}
+.featured-caption {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.featured-caption h2 {
+  font-size: 18px;
+  letter-spacing: -.02em;
+}
+.featured-caption p {
+  font-size: 10px;
+  color: #c5caf0;
+}
+.board-chip {
+  background: rgba(14, 18, 42, 0.85);
+  border: 1px solid #7380ff;
+  border-radius: 12px;
+  padding: 4px 8px;
+  font-size: 10px;
+  color: #ffdc38;
+  font-weight: 800;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 2px 8px;
+}
+.section-head h2 { font-size: 15px; }
+
+.kuji-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.kuji-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  padding: 8px;
+  border: 1px solid #2d3352;
+  border-radius: 12px;
+  background: linear-gradient(105deg, #171b33, #0f1224);
+  color: #fff;
+  cursor: pointer;
+}
+.kuji-card.selected {
+  border: 2px solid #7e8dff;
+  background: linear-gradient(105deg, #242a54, #141830);
+}
+.kuji-card img {
+  width: 80px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #20243e;
+  flex-shrink: 0;
+}
+.kuji-copy {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  gap: 2px;
+}
+.kuji-copy b { font-size: 13px; }
+.kuji-copy small { font-size: 9px; color: #a4abdc; }
+.kuji-copy .stock-row {
+  font-size: 10px;
+  color: #c9ceea;
+  margin-top: 3px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.stock-tag {
+  background: rgba(255, 115, 0, 0.2);
+  color: #ff9944;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+/* Purchase Panel */
+.purchase-panel {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid #333a5c;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #181c36, #101326);
+}
+.purchase-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #292f4c;
+}
+.qty-ctrl { display: flex; align-items: center; gap: 12px; }
+.qty-ctrl button {
+  width: 32px;
+  height: 32px;
+  background: #232849;
+  color: white;
+  border: 1px solid #3f4770;
+  border-radius: 50%;
+  font-size: 17px;
+  cursor: pointer;
+}
+.qty-ctrl strong { font-size: 18px; min-width: 18px; text-align: center; }
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 12px 0 14px;
+}
+.price-row span { font-size: 12px; color: #a8afcc; }
+.price-row b { font-size: 20px; color: var(--accent); }
+
+.start-btn {
+  width: 100%;
+  border: 0;
+  border-radius: 30px;
+  padding: 13px;
+  background: linear-gradient(#ffef6b, #ffd51b);
+  color: #19182a;
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #b88c08;
+}
+
+/* ========================================================
+   현황판 SCREEN (모바일 최적화 & 상점메타 삭제)
+   ======================================================== */
+.board-container {
+  background: #090c1d;
+  border: 2px solid #282f55;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* Clean Header without store meta */
+.board-header {
+  background: linear-gradient(180deg, #181d3d 0%, #10132b 100%);
+  border-bottom: 2px solid #2f365f;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.board-back-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ff3377, #d81b60);
+  border: 2px solid #ff77a8;
+  color: white;
+  font-size: 18px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 51, 119, 0.4);
+  flex-shrink: 0;
+}
+.board-title-group {
+  text-align: center;
+  flex: 1;
+}
+.board-title-group h1 {
+  font-size: 17px;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+}
+.board-counter-group {
+  text-align: right;
+  flex-shrink: 0;
+  background: rgba(14, 18, 38, 0.9);
+  border: 1px solid #343b66;
+  border-radius: 8px;
+  padding: 3px 7px;
+}
+.board-counter-group .counter-lbl {
+  font-size: 7.5px;
+  color: #929bbd;
+  display: block;
+}
+.board-counter-group .counter-val {
+  font-size: 15px;
+  font-weight: 900;
+  color: #fff;
+}
+.board-counter-group .counter-val strong { color: #ffdc38; }
+
+/* Pegboard Grid */
+.board-peg-surface {
+  background-color: #0b0e20;
+  background-image: radial-gradient(#1c2240 1.5px, transparent 1.5px);
+  background-size: 12px 12px;
+  padding: 10px 8px 14px;
+}
+
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 7px;
+}
+
+/* Compact Mobile Board Card */
+.board-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f4f6fd 60%, #e6eefc 100%);
+  border-radius: 9px;
+  border: 1px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  padding: 6px 7px;
+  color: #171a2e;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 68px;
+}
+.board-card.soldout {
+  background: linear-gradient(135deg, #e7ebf3 0%, #d4dae6 100%);
+  opacity: 0.85;
+}
+.board-card-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Grade Medal */
+.grade-medal {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff2b2 0%, #d4af37 40%, #8f6a15 80%, #594008 100%);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.grade-medal-inner {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #23273e 0%, #0d0f1b 100%);
+  border: 1px solid #e5c365;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffdf7a;
+  line-height: 1;
+}
+.grade-medal-inner .medal-letter { font-size: 12px; font-weight: 900; }
+.grade-medal-inner .medal-sub { font-size: 6px; font-weight: 800; }
+
+.grade-medal.last-one {
+  background: radial-gradient(circle at 35% 30%, #ff8db7 0%, #e91e63 45%, #9c1040 85%, #5a0522 100%);
+}
+.grade-medal.last-one .grade-medal-inner {
+  border-color: #ff8db7; color: #fff; background: #230814;
+}
+.grade-medal.last-one .medal-letter { font-size: 8px; font-weight: 1000; }
+
+.grade-medal.double-chance {
+  background: radial-gradient(circle at 35% 30%, #c49eff 0%, #6f42c1 45%, #3d1b7d 85%, #20084c 100%);
+}
+.grade-medal.double-chance .grade-medal-inner {
+  border-color: #c49eff; color: #72f7d1; background: #130a28;
+}
+.grade-medal.double-chance .medal-letter { font-size: 7.5px; font-weight: 1000; }
+
+.board-card-info {
+  flex: 1;
+  min-width: 0;
+}
+.board-card-title {
+  font-size: 11px;
+  font-weight: 900;
+  color: #171b30;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.board-card-thumb {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 5px;
+  border: 1px solid #dae2f0;
+  flex-shrink: 0;
+}
+
+/* Ticket Strip & Remain */
+.board-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  background: rgba(228, 233, 245, 0.7);
+  border-radius: 5px;
+  padding: 2px 5px;
+  margin-top: 4px;
+}
+.ticket-strip {
+  display: flex;
+  align-items: center;
+  gap: 1.5px;
+  background: #121526;
+  border-radius: 3px;
+  padding: 1.5px 2.5px;
+  flex-wrap: wrap;
+  max-width: 105px;
+}
+.ticket-slot {
+  width: 8px;
+  height: 10px;
+  border-radius: 1px;
+  font-size: 6.5px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ticket-slot.active {
+  background: linear-gradient(180deg, #ff953f 0%, #f05a00 100%);
+  color: #ffffff;
+}
+.ticket-slot.drawn {
+  background: #25283a;
+  color: #4b526f;
+  text-decoration: line-through;
+  opacity: 0.55;
+}
+.remain-box {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.remain-label { font-size: 7px; color: #6a7495; font-weight: 700; }
+.remain-count {
+  font-size: 13px;
+  font-weight: 1000;
+  color: #0b1a4a;
+}
+.remain-count.zero { color: #cc2233; }
+.sold-badge {
+  font-size: 8px;
+  font-weight: 900;
+  color: #fff;
+  background: #d32f2f;
+  padding: 1px 3px;
+  border-radius: 2px;
+}
+
+/* Board Footer */
+.board-footer {
+  background: #11142b;
+  border-top: 1px solid #2a3152;
+  padding: 10px 12px;
+  display: flex;
+  gap: 8px;
+}
+.board-btn {
+  flex: 1;
+  border: 0;
+  border-radius: 10px;
+  padding: 11px;
+  font-weight: 900;
+  font-size: 13px;
+  cursor: pointer;
+}
+.board-btn.primary {
+  background: linear-gradient(180deg, #ffef6b, #ffd51b);
+  color: #19182a;
+}
+.board-btn.secondary {
+  background: #232947;
+  color: #d2d7f3;
+  border: 1px solid #3c456d;
+}
+
+/* Scratch & Summary */
+#scratch .title, #summary .title { color: #fff; font-size: 22px; margin: 4px 0 8px; }
+#scratch .sub, #summary .sub { color: #9aa1bc; font-size: 12px; }
+.scratchbox { position: relative; margin-top: 10px; }
+.scratchbox img { display: block; width: 100%; height: 260px; object-fit: contain; background: #fff; border-radius: 14px; }
+.scratchbox canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; border-radius: 14px; z-index: 2; }
+.tag { display: inline-block; border-radius: 99px; background: #352d49; color: #fff; padding: 5px 10px; font-size: 11px; font-weight: 900; }
+.results { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; }
+.result { border: 1px solid #2e3557; background: #13172c; border-radius: 10px; padding: 8px; color: #fff; }
+.result img { width: 100%; height: 125px; object-fit: contain; background: #fff; border-radius: 6px; }
+.result b { font-size: 11px; display: block; margin-top: 4px; }
+.btn {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 13px;
+  font-weight: 800;
+  margin-top: 12px;
+  background: var(--accent);
+  color: #17182a;
+  cursor: pointer;
+}
+.btn.secondary {
+  background: #232947;
+  color: #d2d7f3;
+  border: 1px solid #3c456d;
+  margin-top: 8px;
+}
+.btn:disabled { opacity: .45; }
+
+@media (max-width: 360px) {
+  .board-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
-<body><main class="app">
-<div class="top"><div class="brand">KUJI SCRATCH</div><div class="pill">DEMO · 가상 결제</div></div>
-<section id="home" class="screen active kiosk-home">
-  <div class="kiosk-head"><div class="kiosk-mark">KUJI<span>STATION</span></div><span class="kiosk-status">● ONLINE · DEMO</span></div>
-  <div class="kiosk-intro"><span class="kicker">TODAY'S COLLECTION</span><h1>원하는 작품을 선택하고<br><em>행운의 쿠지</em>를 시작하세요.</h1><p>상품을 선택하면 등급과 남은 수량을 확인할 수 있습니다.</p></div>
-  <div class="featured-frame">
-    <img id="featuredImg" alt="선택한 쿠지 상품 이미지">
+<body>
+<main class="app">
+
+<!-- Header -->
+<div class="top">
+  <div class="brand">🎯 KUJI SCRATCH</div>
+  <div class="top-actions">
+    <button id="topBoardBtn" class="pill board-btn" type="button">📊 실시간 현황판</button>
+  </div>
+</div>
+
+<!-- ==============================================
+     SCREEN 1: HOME
+     ============================================== -->
+<section id="home" class="screen active">
+  <div class="kiosk-intro">
+    <h1>원하는 <em>쿠지</em>를 선택하세요</h1>
+  </div>
+
+  <div class="featured-frame" id="featuredBox">
+    <img id="featuredImg" src="" alt="쿠지">
     <div class="featured-shade"></div>
-    <div class="featured-caption"><span class="live-tag">PICK UP</span><h2 id="featuredTitle">Hearts2Hearts</h2><p id="featuredDesc">PHOTO & GOODS COLLECTION</p></div>
+    <div class="featured-caption">
+      <div>
+        <h2 id="featuredTitle">Hearts2Hearts</h2>
+        <p id="featuredDesc">GOODS COLLECTION</p>
+      </div>
+      <div class="board-chip">현황판 보기 ↗</div>
+    </div>
   </div>
-  <div class="collection-heading"><div><span class="kicker">SELECT A KUJI</span><h2>쿠지 라인업</h2></div><span class="scroll-hint">아래로 스크롤 ↓</span></div>
+
+  <div class="section-head">
+    <h2>쿠지 라인업</h2>
+    <button class="pill" id="lineupBoardBtn" type="button">📊 현황판</button>
+  </div>
+
   <div class="kuji-list">
-    <button class="kuji-card selected" data-theme="h2h" type="button"><img alt="Hearts2Hearts"><span class="kuji-copy"><b>Hearts2Hearts</b><small>PHOTO & GOODS</small><span class="stock">총 60매 · 1회 ₩5,000</span></span><span class="card-arrow">›</span></button>
-    <button class="kuji-card" data-theme="tuide" type="button"><img alt="TUIDE"><span class="kuji-copy"><b>TUIDE</b><small>ALBUM & GOODS</small><span class="stock">총 60매 · 1회 ₩5,000</span></span><span class="card-arrow">›</span></button>
-    <button class="kuji-card" data-theme="goldkamuy" type="button"><img alt="골든카무이"><span class="kuji-copy"><b>골든카무이</b><small>ICHIBAN KUJI</small><span class="stock">총 60매 · 1회 ₩5,000</span></span><span class="card-arrow">›</span></button>
+    <button class="kuji-card selected" data-theme="h2h" type="button">
+      <img src="https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg" alt="Hearts2Hearts">
+      <span class="kuji-copy">
+        <b>Hearts2Hearts</b>
+        <small>PHOTO & GOODS</small>
+        <span class="stock-row">
+          <span class="stock-tag" id="stockBadge-h2h">잔여 60/60</span>
+          <span>1회 ₩5,000</span>
+        </span>
+      </span>
+      <span style="color:var(--accent); font-size:20px;">›</span>
+    </button>
+
+    <button class="kuji-card" data-theme="tuide" type="button">
+      <img src="https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png" alt="TUIDE">
+      <span class="kuji-copy">
+        <b>TUIDE</b>
+        <small>ALBUM & GOODS</small>
+        <span class="stock-row">
+          <span class="stock-tag" id="stockBadge-tuide">잔여 60/60</span>
+          <span>1회 ₩5,000</span>
+        </span>
+      </span>
+      <span style="color:var(--accent); font-size:20px;">›</span>
+    </button>
+
+    <button class="kuji-card" data-theme="goldkamuy" type="button">
+      <img src="https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg" alt="골든카무이">
+      <span class="kuji-copy">
+        <b>골든카무이</b>
+        <small>ICHIBAN KUJI</small>
+        <span class="stock-row">
+          <span class="stock-tag" id="stockBadge-goldkamuy">잔여 60/60</span>
+          <span>1회 ₩5,000</span>
+        </span>
+      </span>
+      <span style="color:var(--accent); font-size:20px;">›</span>
+    </button>
   </div>
-  <div class="purchase-panel"><div class="purchase-title"><div><span class="kicker">YOUR TICKETS</span><h2>뽑을 수량 선택</h2></div><span class="demo-pill">가상 결제</span></div><div class="row"><span class="label">스크래치 수량</span><div class="qty"><button id="minus" type="button" aria-label="수량 줄이기">−</button><strong id="qty">5</strong><button id="plus" type="button" aria-label="수량 늘리기">+</button></div></div><div class="price-row"><span>예상 결제 금액</span><b id="total">₩ 25,000</b></div><p class="note">A상 1개 · B상 2개 · C상 4개 · D상 8개 · E상 15개 · F상 30개</p><button id="pay" class="start-btn" type="button"><span>시작하기</span><b>→</b></button></div>
+
+  <div class="purchase-panel">
+    <div class="purchase-row">
+      <span style="font-size:13px; color:#a8afcc;">뽑을 수량</span>
+      <div class="qty-ctrl">
+        <button id="minus" type="button">−</button>
+        <strong id="qty">5</strong>
+        <button id="plus" type="button">+</button>
+      </div>
+    </div>
+    <div class="price-row">
+      <span>결제 금액</span>
+      <b id="total">₩ 25,000</b>
+    </div>
+    <button id="pay" class="start-btn" type="button">시작하기 →</button>
+  </div>
 </section>
+
+<!-- ==============================================
+     SCREEN 2: 현황판 (상점메타 삭제 & 텍스트 2/3 축소)
+     ============================================== -->
+<section id="board" class="screen">
+  <div class="board-container">
+    <div class="board-header">
+      <button class="board-back-btn" id="boardBackBtn" type="button">←</button>
+      <div class="board-title-group">
+        <h1 id="boardThemeTitle">Hearts2Hearts</h1>
+      </div>
+      <div class="board-counter-group">
+        <span class="counter-lbl">잔여 / 총수량</span>
+        <div class="counter-val">
+          <strong id="boardRemainCount">60</strong>/<span id="boardTotalCount">60</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="board-peg-surface">
+      <div class="board-grid" id="boardGrid">
+        <!-- Compact cards -->
+      </div>
+    </div>
+
+    <div class="board-footer">
+      <button class="board-btn secondary" id="btnResetBox" type="button">🔄 새 판 개봉</button>
+      <button class="board-btn primary" id="btnDrawFromBoard" type="button">🎯 이 판 뽑기</button>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================================
+     SCREEN 3: SCRATCH
+     ============================================== -->
 <section id="scratch" class="screen">
-<div class="eyebrow" id="themeName">H2H · KUJI</div><p class="note" id="progress">1 / 5</p><h2 class="title">티켓을 긁어보세요</h2><p class="sub">손가락이나 마우스로 회색 코팅을 문질러 당첨 상품을 확인하세요.</p>
-<div class="scratchbox" id="scratchbox"><img id="prizeImg" alt="당첨 상품 이미지"><canvas id="scratchCanvas"></canvas></div>
-<div id="prizeMeta" style="margin-top:14px;visibility:hidden"><span class="tag" id="grade">등급 미공개</span><h2 id="prizeName" class="title">어떤 굿즈가 나올까요?</h2><p id="scratchNote" class="note">회색 코팅을 긁어야 등급과 굿즈가 공개됩니다.</p></div>
-<button id="next" class="btn" disabled>다음 티켓</button>
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <span class="tag" id="progress">1 / 5</span>
+    <button class="pill" id="scratchToBoardBtn" type="button">📊 판 현황</button>
+  </div>
+
+  <div class="scratchbox" id="scratchbox">
+    <img id="prizeImg" alt="상품 이미지">
+    <canvas id="scratchCanvas"></canvas>
+  </div>
+
+  <div id="prizeMeta" style="margin-top:10px; visibility:hidden">
+    <span class="tag" id="grade" style="background:#553f7c;">-</span>
+    <h2 id="prizeName" class="title" style="margin-top:4px;">-</h2>
+  </div>
+
+  <button id="next" class="btn" disabled>다음 티켓</button>
 </section>
+
+<!-- ==============================================
+     SCREEN 4: SUMMARY
+     ============================================== -->
 <section id="summary" class="screen">
-<div class="eyebrow">YOUR RESULTS</div><h2 class="title">당첨 결과</h2><p class="sub" id="summaryText"></p><div class="results" id="results"></div><button id="again" class="btn">처음으로 돌아가기</button>
+  <h2 class="title">당첨 결과</h2>
+  <div class="results" id="results"></div>
+  <button id="summaryToBoardBtn" class="btn" type="button">📊 실시간 현황판 보기</button>
+  <button id="again" class="btn secondary" type="button">다시 뽑기</button>
 </section>
+
 </main>
-<script src="./images.js"></script>
+
 <script>
-const themes={h2h:{name:"Hearts2Hearts",short:"H2H"},tuide:{name:"TUIDE",short:"TUIDE"},goldkamuy:{name:"골든카무이",short:"GOLD KAMUY"}};
-const grades=[
-{key:"A",name:"A PRIZE",prize:{h2h:"스페셜 포토 굿즈",tuide:"스페셜 앨범 굿즈",goldkamuy:"스기모토 피규어"},count:1,file:window.KUJI_IMAGES.prizes.A},
-{key:"B",name:"B PRIZE",prize:{h2h:"포토카드 세트",tuide:"포토카드·포토북 세트",goldkamuy:"오가타 피규어"},count:2,file:window.KUJI_IMAGES.prizes.B},
-{key:"C",name:"C PRIZE",prize:{h2h:"아크릴 키링",tuide:"미니 굿즈",goldkamuy:"보타로 피규어"},count:4,file:window.KUJI_IMAGES.prizes.C},
-{key:"D",name:"D PRIZE",prize:{h2h:"포토 굿즈",tuide:"앨범·일러스트 굿즈",goldkamuy:"일러스트 보드"},count:8,file:window.KUJI_IMAGES.prizes.D},
-{key:"E",name:"E PRIZE",prize:{h2h:"랜덤 스티커·소품",tuide:"랜덤 스티커·포토 소품",goldkamuy:"초코놋코 미니 피규어"},count:15,file:window.KUJI_IMAGES.prizes.E},
-{key:"F",name:"F PRIZE",prize:{h2h:"데일리 굿즈",tuide:"데일리 굿즈",goldkamuy:"유리 제품"},count:30,file:window.KUJI_IMAGES.prizes.F}
+const themes = {
+  h2h: {
+    name: "Hearts2Hearts",
+    short: "H2H",
+    banner: "https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg",
+    lastOne: { name: "라스트원상 사인 보드", file: "https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg" },
+    doubleChance: { name: "더블찬스 풀 패키지", file: "https://media.ktown4u.com/products/resize/thumbnail/2026/06/29/AH6JfX.png" }
+  },
+  tuide: {
+    name: "TUIDE",
+    short: "TUIDE",
+    banner: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png",
+    lastOne: { name: "라스트원상 아크릴", file: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png" },
+    doubleChance: { name: "더블찬스 사인 앨범", file: "https://cdn-contents.weverseshop.io/public/shop/0d88dca6eb62e72c3bce249e096fe372.png" }
+  },
+  goldkamuy: {
+    name: "골든카무이",
+    short: "골든카무이",
+    banner: "https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg",
+    lastOne: { name: "라스트원상 오가타", file: "https://actionfigurebrasil.com.br/cdn/shop/files/golden-kamuy-ogata-hyakunosuke-ichiban-kuji-ichiban-kuji-golden-kamuy-kinkai-soudatsusen-b-prize-masterlise-bandai-spirits-actionfigurebrasil-01_1024x1024.webp?v=1774221274" },
+    doubleChance: { name: "더블찬스 피규어", file: "https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg" }
+  }
+};
+
+const grades = [
+  { key: "A", name: "A상", prize: { h2h: "스페셜 굿즈", tuide: "스페셜 앨범", goldkamuy: "스기모토 피규어" }, count: 1, file: { h2h: "https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg", tuide: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png", goldkamuy: "https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg" } },
+  { key: "B", name: "B상", prize: { h2h: "포토카드 세트", tuide: "포토북 세트", goldkamuy: "오가타 피규어" }, count: 2, file: { h2h: "https://media.ktown4u.com/products/resize/thumbnail/2026/06/29/AH6JfX.png", tuide: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png", goldkamuy: "https://actionfigurebrasil.com.br/cdn/shop/files/golden-kamuy-ogata-hyakunosuke-ichiban-kuji-ichiban-kuji-golden-kamuy-kinkai-soudatsusen-b-prize-masterlise-bandai-spirits-actionfigurebrasil-01_1024x1024.webp?v=1774221274" } },
+  { key: "C", name: "C상", prize: { h2h: "아크릴 키링", tuide: "미니 굿즈", goldkamuy: "보타로 피규어" }, count: 4, file: { h2h: "https://kplaceshop.com/cdn/shop/files/hearts2hearts-acrylic-keyring-2nd-mini-album-lemon-tang-pop-up-official-md-carmen-ver-main-image_600x.png?v=1783013031", tuide: "https://cdn.shopify.com/s/files/1/0675/8105/1017/files/1000016904_detail_044.jpg?v=1785782781&width=1500", goldkamuy: "https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg" } },
+  { key: "D", name: "D상", prize: { h2h: "일러스트 보드", tuide: "일러스트 굿즈", goldkamuy: "일러스트 보드" }, count: 8, file: { h2h: "https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg", tuide: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png", goldkamuy: "https://jumpichiban.com/cdn/shop/files/IchibanKujiGoldenKamuyGoldNuggetScramble-IPrizeVisualSheetCompleteSetof12_7.webp?v=1774572893&width=1000" } },
+  { key: "E", name: "E상", prize: { h2h: "스티커 세트", tuide: "포토 소품", goldkamuy: "미니 피규어" }, count: 15, file: { h2h: "https://media.ktown4u.com/products/resize/thumbnail/2026/06/29/AH6JfX.png", tuide: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png", goldkamuy: "https://pbs.twimg.com/media/HEFQfc8bsAATsES.jpg" } },
+  { key: "F", name: "F상", prize: { h2h: "타올 굿즈", tuide: "클리어파일", goldkamuy: "유리 컬렉션" }, count: 30, file: { h2h: "https://kplaceshop.com/cdn/shop/files/hearts2hearts-acrylic-keyring-2nd-mini-album-lemon-tang-pop-up-official-md-carmen-ver-main-image_600x.png?v=1783013031", tuide: "https://cdn-contents.weverseshop.io/public/shop/0d88dca6eb62e72c3bce249e096fe372.png", goldkamuy: "https://pbs.twimg.com/media/HEFQet5aoAAmwon.jpg" } }
 ];
-let theme="h2h",qty=5,inventory=[],purchased=0,results=[],current=null,idx=0,ctx=null,down=false,last=null,checked=false;
-const $=id=>document.getElementById(id), won=n=>"₩ "+n.toLocaleString("ko-KR");
-function placeholder(g){let colors={A:"#f6d8a8",B:"#d9e8ff",C:"#e7d7f7",D:"#ffe2e5",E:"#d9f0df",F:"#ece8e0"};return "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="500" height="550" viewBox="0 0 500 550"><defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${colors[g]||"#e4e7f8"}"/><stop offset="1" stop-color="#202648"/></linearGradient></defs><rect width="500" height="550" rx="25" fill="url(#bg)"/><rect x="18" y="18" width="464" height="514" rx="20" fill="none" stroke="#fff" stroke-opacity=".65" stroke-width="3"/><circle cx="250" cy="205" r="100" fill="#fff" fill-opacity=".14" stroke="#fff" stroke-opacity=".55" stroke-width="2"/><text x="250" y="230" text-anchor="middle" font-size="78" font-family="Arial,sans-serif" font-weight="900" fill="#fff">${g}</text><text x="250" y="365" text-anchor="middle" font-size="29" font-family="Arial,sans-serif" font-weight="900" fill="#fff">${g} PRIZE</text><text x="250" y="405" text-anchor="middle" font-size="16" font-family="Arial,sans-serif" letter-spacing="4" fill="#fff">KUJI COLLECTION</text></svg>`)}
-function themePlaceholder(t){const data={h2h:{label:"Hearts2Hearts",sub:"PHOTO & GOODS",color:"#edb8d5"},tuide:{label:"TUIDE",sub:"ALBUM & GOODS",color:"#c7c8f5"},goldkamuy:{label:"GOLDEN KAMUY",sub:"ICHIBAN KUJI",color:"#c4a66a"}}[t]||{label:"KUJI COLLECTION",sub:"SCRATCH TO REVEAL",color:"#8892c8"};return "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="360" viewBox="0 0 600 360"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${data.color}"/><stop offset="1" stop-color="#11152e"/></linearGradient></defs><rect width="600" height="360" fill="url(#g)"/><rect x="16" y="16" width="568" height="328" rx="16" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="2"/><circle cx="300" cy="145" r="80" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="2"/><path d="M250 145h100M300 95v100" stroke="#fff" stroke-opacity=".3" stroke-width="2"/><text x="300" y="250" text-anchor="middle" font-family="Arial,sans-serif" font-size="30" font-weight="900" fill="#fff">${data.label}</text><text x="300" y="282" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" letter-spacing="4" fill="#fff">${data.sub}</text></svg>`)}
-function guardImage(img,fallback){img.onerror=()=>{img.onerror=null;img.src=fallback};}
-function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");window.scrollTo(0,0)}
-function update(){ $("qty").textContent=qty;if($("unit"))$("unit").textContent=won(5000);$("total").textContent=won(qty*5000);$("pay").textContent=won(qty*5000)+" 가상 결제하기";document.querySelectorAll(".theme").forEach(b=>b.classList.toggle("selected",b.dataset.theme===theme));}
-function updateFeatured(){const t=themes[theme];const first=grades.find(g=>g.file[theme]);const img=$("featuredImg");guardImage(img,themePlaceholder(theme));img.src=window.KUJI_IMAGES.covers[theme]||themePlaceholder(theme);$("featuredTitle").textContent=t.name;$("featuredDesc").textContent=theme==="goldkamuy"?"ICHIBAN KUJI COLLECTION":theme==="tuide"?"ALBUM & GOODS COLLECTION":"PHOTO & GOODS COLLECTION";document.querySelectorAll(".kuji-card").forEach(b=>{b.classList.toggle("selected",b.dataset.theme===theme);const cardImg=b.querySelector("img");const cardTheme=b.dataset.theme;cardImg.dataset.fallback=themePlaceholder(cardTheme);guardImage(cardImg,cardImg.dataset.fallback);cardImg.src=window.KUJI_IMAGES.covers[cardTheme]||cardImg.dataset.fallback;})}
-document.querySelectorAll(".kuji-card").forEach(b=>{b.onclick=()=>{theme=b.dataset.theme;update();updateFeatured()}});
-$("minus").onclick=()=>{qty=Math.max(1,qty-1);update()};$("plus").onclick=()=>{qty=Math.min(10,qty+1);update()};
-function makeInventory(){let a=[];grades.forEach(g=>{for(let i=0;i<g.count;i++)a.push(g)});for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-$("pay").onclick=()=>{inventory=makeInventory();purchased=qty;results=[];idx=0;begin();};
-function begin(){if(results.length>=purchased){summary();return}if(!inventory.length){summary();return}current=inventory.pop();$("prizeMeta").style.visibility="hidden";$("progress").textContent=(results.length+1)+" / "+purchased;$("themeName").textContent=themes[theme].short+" · KUJI";$("grade").textContent="등급 미공개";$("prizeName").textContent="어떤 굿즈가 나올까요?";$("scratchNote").textContent="회색 코팅을 긁어야 등급과 굿즈가 공개됩니다.";const im=$("prizeImg");im.onerror=()=>{im.onerror=null;im.src=placeholder(current.key)};im.src=current.file[theme]||placeholder(current.key);$("next").disabled=true;$("next").textContent=results.length+1===purchased?"결과 보기":"다음 티켓";show("scratch");setTimeout(setupCanvas,100)}
-function setupCanvas(){let can=$("scratchCanvas"),box=$("scratchbox"),r=box.getBoundingClientRect(),dpr=Math.max(1,devicePixelRatio||1);can.width=r.width*dpr;can.height=280*dpr;can.style.height="280px";ctx=can.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);let g=ctx.createLinearGradient(0,0,r.width,280);g.addColorStop(0,"#c7c6c3");g.addColorStop(.5,"#f1f0ed");g.addColorStop(1,"#b9b8b5");ctx.globalCompositeOperation="source-over";ctx.fillStyle=g;ctx.fillRect(0,0,r.width,280);ctx.fillStyle="#5d5a55";ctx.textAlign="center";ctx.font="900 20px sans-serif";ctx.fillText("SCRATCH HERE",r.width/2,130);ctx.font="13px sans-serif";ctx.fillText("문질러서 공개하세요",r.width/2,157);checked=false}
-function pos(e){let r=$("scratchCanvas").getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
-function stroke(e){if(!down||!ctx||checked)return;e.preventDefault();let p=pos(e);ctx.globalCompositeOperation="destination-out";ctx.lineWidth=42;ctx.lineCap="round";ctx.lineJoin="round";ctx.beginPath();if(last){ctx.moveTo(last.x,last.y)}else ctx.moveTo(p.x,p.y);ctx.lineTo(p.x,p.y);ctx.stroke();last=p}
-function reveal(){if(checked||!current)return;checked=true;down=false;last=null;let can=$("scratchCanvas");ctx.clearRect(0,0,can.width,can.height);$("scratchNote").textContent="당첨 결과: "+current.name+" · "+current.prize[theme];$("prizeMeta").style.visibility="visible";$("grade").textContent=current.name;$("prizeName").textContent=current.prize[theme];$("next").disabled=false;results.push(current)}
-const can=$("scratchCanvas");can.addEventListener("pointerdown",e=>{if(checked)return;down=true;last=pos(e);can.setPointerCapture?.(e.pointerId);stroke(e)});can.addEventListener("pointermove",stroke);function stop(){if(!down)return;down=false;last=null;if(!checked){const c=$("scratchCanvas"),small=document.createElement("canvas");small.width=20;small.height=12;let x=small.getContext("2d");x.drawImage(c,0,0,20,12);let data=x.getImageData(0,0,20,12).data,clear=0;for(let i=3;i<data.length;i+=4)if(data[i]<30)clear++;if(clear>35)reveal()}}can.addEventListener("pointerup",stop);can.addEventListener("pointercancel",stop);
-$("next").onclick=()=>{if(!checked)return;begin()};
-function summary(){$("summaryText").textContent=`${themes[theme].name} · ${purchased}회 스크래치 결과`;let out=$("results");out.innerHTML="";results.forEach(g=>{let card=document.createElement("div");card.className="result";let im=document.createElement("img");im.alt=g.name;im.onerror=()=>{im.onerror=null;im.src=placeholder(g.key)};im.src=g.file[theme]||placeholder(g.key);let b=document.createElement("b");b.textContent=g.name+" · "+g.prize[theme];card.append(im,b);out.append(card)});show("summary")}
-$("again").onclick=()=>{qty=5;update();show("home")};update();updateFeatured();
-</script></body></html>
+
+const themeBoxes = {};
+function initBox(tKey) {
+  let tickets = [];
+  grades.forEach(g => {
+    for (let i = 0; i < g.count; i++) tickets.push({ ...g, drawn: false });
+  });
+  for (let i = tickets.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [tickets[i], tickets[j]] = [tickets[j], tickets[i]];
+  }
+  themeBoxes[tKey] = { tickets, totalCount: tickets.length, lastOneAwarded: false };
+}
+Object.keys(themes).forEach(initBox);
+
+let theme = "h2h", qty = 5, purchased = 0, results = [], current = null, lastScreen = "home", idx = 0;
+let ctx = null, down = false, last = null, checked = false;
+const $ = id => document.getElementById(id), won = n => "₩ " + n.toLocaleString("ko-KR");
+
+function placeholder(g) {
+  let colors = { A: "#f6d8a8", B: "#d9e8ff", C: "#e7d7f7", D: "#ffe2e5", E: "#d9f0df", F: "#ece8e0" };
+  return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" rx="16" fill="${colors[g]||"#e4e7f8"}"/><text x="150" y="170" text-anchor="middle" font-size="70" font-family="sans-serif" font-weight="900" fill="#222">${g}</text></svg>`);
+}
+
+function show(id) {
+  const active = document.querySelector(".screen.active");
+  if (active && active.id !== id) lastScreen = active.id;
+  document.querySelectorAll(".screen").forEach(x => x.classList.remove("active"));
+  $(id).classList.add("active");
+  window.scrollTo(0, 0);
+  if (id === "board") renderBoard();
+}
+
+function update() {
+  const box = themeBoxes[theme];
+  const rem = box.tickets.filter(t => !t.drawn).length;
+  $("qty").textContent = qty;
+  $("total").textContent = won(qty * 5000);
+  $("pay").disabled = (rem === 0);
+  $("pay").textContent = (rem === 0) ? "완판 (새 판 필요)" : "시작하기 →";
+
+  Object.keys(themes).forEach(tKey => {
+    const b = themeBoxes[tKey];
+    const r = b.tickets.filter(t => !t.drawn).length;
+    const badge = $(`stockBadge-${tKey}`);
+    if (badge) badge.textContent = `잔여 ${r}/${b.totalCount}`;
+  });
+  document.querySelectorAll(".kuji-card").forEach(b => b.classList.toggle("selected", b.dataset.theme === theme));
+}
+
+function updateFeatured() {
+  const t = themes[theme];
+  const first = grades.find(g => g.file[theme]);
+  const img = $("featuredImg");
+  img.onerror = () => { img.onerror = null; img.src = placeholder("A"); };
+  img.src = first.file[theme] || placeholder("A");
+  $("featuredTitle").textContent = t.name;
+  $("featuredDesc").textContent = t.name + " COLLECTION";
+}
+
+document.querySelectorAll(".kuji-card").forEach(b => {
+  b.onclick = () => {
+    theme = b.dataset.theme;
+    update();
+    updateFeatured();
+  };
+});
+
+$("minus").onclick = () => { qty = Math.max(1, qty - 1); update(); };
+$("plus").onclick = () => {
+  const rem = themeBoxes[theme].tickets.filter(t => !t.drawn).length;
+  qty = Math.min(Math.min(10, rem || 1), qty + 1);
+  update();
+};
+
+/* Render Board (2/3 compact text & NO store meta) */
+function renderBoard() {
+  const t = themes[theme];
+  const box = themeBoxes[theme];
+  const remaining = box.tickets.filter(t => !t.drawn);
+  
+  $("boardThemeTitle").textContent = t.name;
+  $("boardRemainCount").textContent = remaining.length;
+  $("boardTotalCount").textContent = box.totalCount;
+
+  const grid = $("boardGrid");
+  grid.innerHTML = "";
+
+  grades.forEach(g => {
+    const remGrade = remaining.filter(tk => tk.key === g.key).length;
+    const drawnGrade = g.count - remGrade;
+    const isZero = (remGrade === 0);
+
+    const card = document.createElement("div");
+    card.className = "board-card" + (isZero ? " soldout" : "");
+
+    const top = document.createElement("div");
+    top.className = "board-card-top";
+    top.innerHTML = `
+      <div class="grade-medal">
+        <div class="grade-medal-inner">
+          <span class="medal-letter">${g.key}</span>
+          <span class="medal-sub">상</span>
+        </div>
+      </div>
+      <div class="board-card-info">
+        <div class="board-card-title">${g.name} ${g.prize[theme]}</div>
+      </div>
+      <img class="board-card-thumb" src="${g.file[theme] || placeholder(g.key)}" alt="${g.key}" onerror="this.src='${placeholder(g.key)}'">
+    `;
+
+    const bottom = document.createElement("div");
+    bottom.className = "board-card-bottom";
+
+    const strip = document.createElement("div");
+    strip.className = "ticket-strip";
+    for (let i = 0; i < remGrade; i++) strip.innerHTML += `<span class="ticket-slot active">${g.key}</span>`;
+    for (let i = 0; i < drawnGrade; i++) strip.innerHTML += `<span class="ticket-slot drawn">${g.key}</span>`;
+
+    const remainBox = document.createElement("div");
+    remainBox.className = "remain-box";
+    if (isZero) {
+      remainBox.innerHTML = `<span class="sold-badge">매진</span>`;
+    } else {
+      remainBox.innerHTML = `<span class="remain-label">잔여</span><span class="remain-count">${remGrade}</span>`;
+    }
+
+    bottom.append(strip, remainBox);
+    card.append(top, bottom);
+    grid.appendChild(card);
+  });
+
+  // Last One Card
+  const lastCard = document.createElement("div");
+  lastCard.className = "board-card";
+  const loStatus = box.lastOneAwarded ? "완료" : "1";
+  lastCard.innerHTML = `
+    <div class="board-card-top">
+      <div class="grade-medal last-one">
+        <div class="grade-medal-inner"><span class="medal-letter">LAST</span></div>
+      </div>
+      <div class="board-card-info">
+        <div class="board-card-title">${t.lastOne.name}</div>
+      </div>
+      <img class="board-card-thumb" src="${t.lastOne.file}" alt="LAST" onerror="this.src='${placeholder("A")}'">
+    </div>
+    <div class="board-card-bottom">
+      <span style="font-size:7.5px; color:#d81b60; font-weight:800;">마지막 1장 지급</span>
+      <div class="remain-box"><span class="remain-label">잔여</span><span class="remain-count" style="color:#d81b60">${loStatus}</span></div>
+    </div>
+  `;
+  grid.appendChild(lastCard);
+
+  // Double Chance Card
+  const dcCard = document.createElement("div");
+  dcCard.className = "board-card";
+  dcCard.innerHTML = `
+    <div class="board-card-top">
+      <div class="grade-medal double-chance">
+        <div class="grade-medal-inner"><span class="medal-letter">W</span></div>
+      </div>
+      <div class="board-card-info">
+        <div class="board-card-title">${t.doubleChance.name}</div>
+      </div>
+      <img class="board-card-thumb" src="${t.doubleChance.file}" alt="W" onerror="this.src='${placeholder("B")}'">
+    </div>
+    <div class="board-card-bottom">
+      <span style="font-size:7.5px; color:#72f7d1; font-weight:800;">추첨권</span>
+      <div class="remain-box"><span class="remain-label" style="font-size:7px;">추첨</span></div>
+    </div>
+  `;
+  grid.appendChild(dcCard);
+}
+
+$("boardBackBtn").onclick = () => show(lastScreen || "home");
+$("topBoardBtn").onclick = () => show("board");
+$("lineupBoardBtn").onclick = () => show("board");
+$("featuredBox").onclick = () => show("board");
+$("scratchToBoardBtn").onclick = () => show("board");
+$("summaryToBoardBtn").onclick = () => show("board");
+
+$("btnDrawFromBoard").onclick = () => {
+  show("home");
+  $("pay").scrollIntoView({ behavior: "smooth" });
+};
+
+$("btnResetBox").onclick = () => {
+  if (confirm(`'${themes[theme].name}' 판을 60매로 초기화할까요?`)) {
+    initBox(theme);
+    update();
+    renderBoard();
+  }
+};
+
+/* Scratch Logic */
+$("pay").onclick = () => {
+  const box = themeBoxes[theme];
+  const unDrawn = box.tickets.filter(t => !t.drawn);
+  if (!unDrawn.length) {
+    alert("판이 완판되었습니다. 새 판을 개봉해주세요!");
+    show("board");
+    return;
+  }
+  const count = Math.min(qty, unDrawn.length);
+  results = [];
+  for (let i = 0; i < count; i++) {
+    const list = box.tickets.filter(t => !t.drawn);
+    if (!list.length) break;
+    const picked = list[Math.floor(Math.random() * list.length)];
+    picked.drawn = true;
+    results.push(picked);
+
+    if (box.tickets.filter(t => !t.drawn).length === 0 && !box.lastOneAwarded) {
+      box.lastOneAwarded = true;
+      results.push({ key: "LAST", name: "LAST-ONE상", prize: { [theme]: themes[theme].lastOne.name }, file: { [theme]: themes[theme].lastOne.file }, isLastOne: true });
+    }
+  }
+  idx = 0;
+  begin();
+};
+
+function begin() {
+  if (idx >= results.length) { summary(); return; }
+  current = results[idx];
+  $("prizeMeta").style.visibility = "hidden";
+  $("progress").textContent = (idx + 1) + " / " + results.length;
+
+  const im = $("prizeImg");
+  const fb = placeholder(current.key === "LAST" ? "A" : current.key);
+  im.onerror = () => { im.onerror = null; im.src = fb; };
+  im.src = (current.file && current.file[theme]) || fb;
+
+  $("next").disabled = true;
+  $("next").textContent = (idx + 1 === results.length) ? "결과 보기" : "다음 티켓";
+  show("scratch");
+  setTimeout(setupCanvas, 80);
+}
+
+function setupCanvas() {
+  let can = $("scratchCanvas"), box = $("scratchbox"), r = box.getBoundingClientRect(), dpr = Math.max(1, devicePixelRatio || 1);
+  can.width = r.width * dpr;
+  can.height = 260 * dpr;
+  can.style.height = "260px";
+  ctx = can.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  ctx.globalCompositeOperation = "source-over";
+  ctx.fillStyle = "#c2c2c0";
+  ctx.fillRect(0, 0, r.width, 260);
+
+  ctx.fillStyle = "#4a4744";
+  ctx.textAlign = "center";
+  ctx.font = "900 18px sans-serif";
+  ctx.fillText("SCRATCH", r.width / 2, 125);
+  ctx.font = "12px sans-serif";
+  ctx.fillText("문질러서 확인", r.width / 2, 148);
+  checked = false;
+}
+
+function pos(e) {
+  let r = $("scratchCanvas").getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+function stroke(e) {
+  if (!down || !ctx || checked) return;
+  e.preventDefault();
+  let p = pos(e);
+  ctx.globalCompositeOperation = "destination-out";
+  ctx.lineWidth = 42;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.beginPath();
+  if (last) ctx.moveTo(last.x, last.y); else ctx.moveTo(p.x, p.y);
+  ctx.lineTo(p.x, p.y);
+  ctx.stroke();
+  last = p;
+}
+
+function reveal() {
+  if (checked || !current) return;
+  checked = true; down = false; last = null;
+  ctx.clearRect(0, 0, $("scratchCanvas").width, $("scratchCanvas").height);
+  const prizeText = current.prize[theme] || current.prize;
+  $("prizeMeta").style.visibility = "visible";
+  $("grade").textContent = current.name;
+  $("prizeName").textContent = prizeText;
+  $("next").disabled = false;
+  idx++;
+}
+
+const can = $("scratchCanvas");
+can.addEventListener("pointerdown", e => { if (checked) return; down = true; last = pos(e); can.setPointerCapture?.(e.pointerId); stroke(e); });
+can.addEventListener("pointermove", stroke);
+function stop() {
+  if (!down) return;
+  down = false; last = null;
+  if (!checked) {
+    const c = $("scratchCanvas"), small = document.createElement("canvas");
+    small.width = 20; small.height = 12;
+    let x = small.getContext("2d");
+    x.drawImage(c, 0, 0, 20, 12);
+    let data = x.getImageData(0, 0, 20, 12).data, clear = 0;
+    for (let i = 3; i < data.length; i += 4) if (data[i] < 30) clear++;
+    if (clear > 30) reveal();
+  }
+}
+can.addEventListener("pointerup", stop);
+can.addEventListener("pointercancel", stop);
+
+$("next").onclick = () => { if (!checked) return; begin(); };
+
+function summary() {
+  let out = $("results");
+  out.innerHTML = "";
+  results.forEach(g => {
+    let card = document.createElement("div");
+    card.className = "result";
+    let im = document.createElement("img");
+    im.alt = g.name;
+    const fb = placeholder(g.key === "LAST" ? "A" : g.key);
+    im.onerror = () => { im.onerror = null; im.src = fb; };
+    im.src = (g.file && g.file[theme]) || fb;
+
+    let b = document.createElement("b");
+    const prizeText = g.prize[theme] || g.prize;
+    b.textContent = g.name + " " + prizeText;
+    if (g.isLastOne) { b.style.color = "#ff3377"; b.textContent = "★ 라스트원상 " + prizeText; }
+    card.append(im, b);
+    out.append(card);
+  });
+  show("summary");
+  update();
+}
+
+$("again").onclick = () => { qty = 5; update(); show("home"); };
+
+update();
+updateFeatured();
+</script>
+</body>
+</html>
