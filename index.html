@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KUJI SCRATCH — Demo</title>
+<style>
+:root{--ink:#22211f;--muted:#77716b;--paper:#f7f4ef;--card:#fffdfa;--line:#e5ded4;--accent:#ed6379}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.app{max-width:520px;margin:auto;min-height:100vh;padding:20px 16px 40px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.brand{font-size:12px;font-weight:900;letter-spacing:.15em}.pill{font-size:11px;border:1px solid var(--line);padding:7px 10px;border-radius:99px;color:var(--muted)}
+.eyebrow{font-size:11px;color:var(--accent);letter-spacing:.15em;font-weight:800}.hero h1{font-size:32px;line-height:1.1;letter-spacing:-.04em;margin:8px 0}.sub{font-size:14px;line-height:1.6;color:var(--muted)}.themes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}.theme{background:white;border:1px solid var(--line);border-radius:14px;padding:13px 7px;text-align:left;min-height:80px}.theme.selected{border:2px solid var(--accent);background:#fff0f2;padding:12px 6px}.theme b{font-size:12px}.theme small{display:block;color:var(--muted);margin-top:5px;font-size:10px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px;margin-top:12px}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.label{font-size:13px;color:var(--muted)}.price{font-size:23px;font-weight:900}.qty{display:flex;align-items:center;gap:18px}.qty button{width:35px;height:35px;border:1px solid var(--line);border-radius:50%;background:white;font-size:20px}.qty strong{font-size:20px}.btn{width:100%;border:0;border-radius:13px;padding:15px;font-weight:800;margin-top:14px;background:var(--ink);color:white}.btn.secondary{background:#eee9e1;color:var(--ink);margin-top:8px}.screen{display:none}.screen.active{display:block}.title{font-size:27px;line-height:1.2;margin:6px 0 10px;letter-spacing:-.04em}.note{font-size:12px;color:var(--muted);line-height:1.5}.prize-img{width:100%;height:290px;object-fit:contain;background:#fff;border-radius:14px;border:1px solid var(--line)}.scratchbox{position:relative;margin-top:12px}.scratchbox img{display:block;width:100%;height:280px;object-fit:contain;background:#fff;border-radius:15px}.scratchbox canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;border-radius:15px}.tag{display:inline-block;border-radius:99px;background:#f4d9de;padding:6px 10px;font-size:11px;font-weight:900}.results{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.result{border:1px solid var(--line);background:white;border-radius:13px;padding:9px}.result img{width:100%;height:145px;object-fit:contain}.result b{font-size:12px;display:block;margin:5px 0}.toast{font-size:12px;color:#28744a;margin-top:8px}
+</style>
+</head>
+<body><main class="app">
+<div class="top"><div class="brand">KUJI SCRATCH</div><div class="pill">DEMO · 가상 결제</div></div>
+<section id="home" class="screen active">
+<div class="hero"><div class="eyebrow">YOUR LUCKY DRAW</div><h1>긁어서 확인하는<br>오늘의 굿즈 운</h1><p class="sub">테마를 고르고 가상 결제한 뒤, 스크래치 티켓을 한 장씩 긁어 당첨 굿즈를 확인하세요.</p></div>
+<div class="label">테마 선택</div><div class="themes">
+<button class="theme selected" data-theme="h2h"><b>Hearts2Hearts</b><small>PHOTO & GOODS</small></button>
+<button class="theme" data-theme="tuide"><b>TUIDE</b><small>ALBUM & GOODS</small></button>
+<button class="theme" data-theme="goldkamuy"><b>골든카무이</b><small>ICHIBAN KUJI</small></button>
+</div>
+<div class="panel"><div class="row"><span class="label">스크래치 수량</span><div class="qty"><button id="minus">−</button><strong id="qty">5</strong><button id="plus">+</button></div></div><div class="row" style="margin-top:17px"><span class="label">1회 가격</span><b id="unit" class="price">₩ 5,000</b></div><div class="row" style="margin-top:8px"><span class="label">총 가상 결제 금액</span><b id="total">₩ 25,000</b></div><p class="note">A상 1개 · B상 2개 · C상 4개 · D상 8개 · E상 15개 · F상 30개. 재고는 한 번의 이용 세션 내에서만 적용됩니다.</p><button id="pay" class="btn">₩ 25,000 가상 결제하기</button></div>
+</section>
+<section id="scratch" class="screen">
+<div class="eyebrow" id="themeName">H2H · KUJI</div><p class="note" id="progress">1 / 5</p><h2 class="title">티켓을 긁어보세요</h2><p class="sub">손가락이나 마우스로 회색 코팅을 문질러 당첨 상품을 확인하세요.</p>
+<div class="scratchbox" id="scratchbox"><img id="prizeImg" alt="당첨 상품 이미지"><canvas id="scratchCanvas"></canvas></div>
+<div style="margin-top:14px"><span class="tag" id="grade">A PRIZE</span><h2 id="prizeName" class="title">스페셜 굿즈</h2><p id="scratchNote" class="note">이미지 위 코팅을 긁으면 결과가 공개됩니다.</p></div>
+<button id="reveal" class="btn secondary">바로 결과 공개</button><button id="next" class="btn" disabled>다음 티켓</button>
+</section>
+<section id="summary" class="screen">
+<div class="eyebrow">YOUR RESULTS</div><h2 class="title">당첨 결과</h2><p class="sub" id="summaryText"></p><div class="results" id="results"></div><button id="again" class="btn">처음으로 돌아가기</button>
+</section>
+</main>
+<script>
+const themes={h2h:{name:"Hearts2Hearts",short:"H2H"},tuide:{name:"TUIDE",short:"TUIDE"},goldkamuy:{name:"골든카무이",short:"GOLD KAMUY"}};
+const grades=[
+{key:"A",name:"A PRIZE",prize:{h2h:"스페셜 포토 굿즈",tuide:"스페셜 앨범 굿즈",goldkamuy:"스기모토 피규어"},count:1,file:{h2h:"https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg",tuide:"https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png",goldkamuy:"https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg"}},
+{key:"B",name:"B PRIZE",prize:{h2h:"포토카드 세트",tuide:"포토카드·포토북 세트",goldkamuy:"오가타 피규어"},count:2,file:{h2h:"https://media.ktown4u.com/products/resize/thumbnail/2026/06/29/AH6JfX.png",tuide:"https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png",goldkamuy:"https://actionfigurebrasil.com.br/cdn/shop/files/golden-kamuy-ogata-hyakunosuke-ichiban-kuji-ichiban-kuji-golden-kamuy-kinkai-soudatsusen-b-prize-masterlise-bandai-spirits-actionfigurebrasil-01_1024x1024.webp?v=1774221274"}},
+{key:"C",name:"C PRIZE",prize:{h2h:"아크릴 키링",tuide:"미니 굿즈",goldkamuy:"보타로 피규어"},count:4,file:{h2h:"https://kplaceshop.com/cdn/shop/files/hearts2hearts-acrylic-keyring-2nd-mini-album-lemon-tang-pop-up-official-md-carmen-ver-main-image_600x.png?v=1783013031",tuide:"https://cdn.shopify.com/s/files/1/0675/8105/1017/files/1000016904_detail_044.jpg?v=1785782781&width=1500",goldkamuy:"https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg"}},
+{key:"D",name:"D PRIZE",prize:{h2h:"포토 굿즈",tuide:"앨범·일러스트 굿즈",goldkamuy:"일러스트 보드"},count:8,file:{h2h:"https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg",tuide:"https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png",goldkamuy:"https://jumpichiban.com/cdn/shop/files/IchibanKujiGoldenKamuyGoldNuggetScramble-IPrizeVisualSheetCompleteSetof12_7.webp?v=1774572893&width=1000"}},
+{key:"E",name:"E PRIZE",prize:{h2h:"랜덤 스티커·소품",tuide:"랜덤 스티커·포토 소품",goldkamuy:"초코놋코 미니 피규어"},count:15,file:{h2h:"https://media.ktown4u.com/products/resize/thumbnail/2026/06/29/AH6JfX.png",tuide:"https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png",goldkamuy:"https://pbs.twimg.com/media/HEFQfc8bsAATsES.jpg"}},
+{key:"F",name:"F PRIZE",prize:{h2h:"데일리 굿즈",tuide:"데일리 굿즈",goldkamuy:"유리 제품"},count:30,file:{h2h:"https://kplaceshop.com/cdn/shop/files/hearts2hearts-acrylic-keyring-2nd-mini-album-lemon-tang-pop-up-official-md-carmen-ver-main-image_600x.png?v=1783013031",tuide:"https://cdn-contents.weverseshop.io/public/shop/0d88dca6eb62e72c3bce249e096fe372.png",goldkamuy:"https://pbs.twimg.com/media/HEFQet5aoAAmwon.jpg"}}
+];
+let theme="h2h",qty=5,inventory=[],purchased=0,results=[],current=null,idx=0,ctx=null,down=false,last=null,checked=false;
+const $=id=>document.getElementById(id), won=n=>"₩ "+n.toLocaleString("ko-KR");
+function placeholder(g){let colors={A:"#f6d8a8",B:"#d9e8ff",C:"#e7d7f7",D:"#ffe2e5",E:"#d9f0df",F:"#ece8e0"};return "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="500" height="550"><rect width="500" height="550" rx="25" fill="${colors[g]||"#eee"}"/><circle cx="250" cy="205" r="90" fill="#fff" fill-opacity=".7"/><text x="250" y="225" text-anchor="middle" font-size="60" font-family="Arial" font-weight="bold" fill="#222">${g}</text><text x="250" y="355" text-anchor="middle" font-size="24" font-family="Arial" fill="#222">${g} PRIZE</text><text x="250" y="400" text-anchor="middle" font-size="18" font-family="Arial" fill="#555">Image unavailable</text></svg>`)}
+function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");window.scrollTo(0,0)}
+function update(){ $("qty").textContent=qty;$("unit").textContent=won(5000);$("total").textContent=won(qty*5000);$("pay").textContent=won(qty*5000)+" 가상 결제하기";document.querySelectorAll(".theme").forEach(b=>b.classList.toggle("selected",b.dataset.theme===theme));}
+document.querySelectorAll(".theme").forEach(b=>b.onclick=()=>{theme=b.dataset.theme;update()});
+$("minus").onclick=()=>{qty=Math.max(1,qty-1);update()};$("plus").onclick=()=>{qty=Math.min(10,qty+1);update()};
+function makeInventory(){let a=[];grades.forEach(g=>{for(let i=0;i<g.count;i++)a.push(g)});for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+$("pay").onclick=()=>{inventory=makeInventory();purchased=qty;results=[];idx=0;begin();};
+function begin(){if(results.length>=purchased){summary();return}current=inventory.pop();$("progress").textContent=(results.length+1)+" / "+purchased;$("themeName").textContent=themes[theme].short+" · KUJI";$("grade").textContent=current.name;$("prizeName").textContent=current.prize[theme];$("scratchNote").textContent="이미지 위 코팅을 긁으면 결과가 공개됩니다.";const im=$("prizeImg");im.onerror=()=>{im.onerror=null;im.src=placeholder(current.key)};im.src=current.file[theme]||placeholder(current.key);$("next").disabled=true;$("next").textContent=results.length+1===purchased?"결과 보기":"다음 티켓";$("reveal").style.display="block";show("scratch");setTimeout(setupCanvas,100)}
+function setupCanvas(){let can=$("scratchCanvas"),box=$("scratchbox"),r=box.getBoundingClientRect(),dpr=Math.max(1,devicePixelRatio||1);can.width=r.width*dpr;can.height=280*dpr;can.style.height="280px";ctx=can.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);let g=ctx.createLinearGradient(0,0,r.width,280);g.addColorStop(0,"#c7c6c3");g.addColorStop(.5,"#f1f0ed");g.addColorStop(1,"#b9b8b5");ctx.globalCompositeOperation="source-over";ctx.fillStyle=g;ctx.fillRect(0,0,r.width,280);ctx.fillStyle="#5d5a55";ctx.textAlign="center";ctx.font="900 20px sans-serif";ctx.fillText("SCRATCH HERE",r.width/2,130);ctx.font="13px sans-serif";ctx.fillText("문질러서 공개하세요",r.width/2,157);checked=false}
+function pos(e){let r=$("scratchCanvas").getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
+function stroke(e){if(!down||!ctx)return;e.preventDefault();let p=pos(e);ctx.globalCompositeOperation="destination-out";ctx.lineWidth=42;ctx.lineCap="round";ctx.lineJoin="round";ctx.beginPath();if(last){ctx.moveTo(last.x,last.y)}else ctx.moveTo(p.x,p.y);ctx.lineTo(p.x,p.y);ctx.stroke();last=p}
+function reveal(){if(checked)return;checked=true;let can=$("scratchCanvas");ctx.clearRect(0,0,can.width,can.height);$("scratchNote").textContent="당첨 상품이 공개됐습니다."; $("next").disabled=false;$("reveal").style.display="none";results.push(current)}
+const can=$("scratchCanvas");can.addEventListener("pointerdown",e=>{down=true;last=pos(e);can.setPointerCapture?.(e.pointerId);stroke(e)});can.addEventListener("pointermove",stroke);function stop(){if(!down)return;down=false;last=null;if(!checked){const c=$("scratchCanvas"),small=document.createElement("canvas");small.width=20;small.height=12;let x=small.getContext("2d");x.drawImage(c,0,0,20,12);let data=x.getImageData(0,0,20,12).data,clear=0;for(let i=3;i<data.length;i+=4)if(data[i]<30)clear++;if(clear>35)reveal()}}can.addEventListener("pointerup",stop);can.addEventListener("pointercancel",stop);
+$("reveal").onclick=reveal;$("next").onclick=()=>{if(!checked)return;begin()};
+function summary(){$("summaryText").textContent=`${themes[theme].name} · ${purchased}회 스크래치 결과`;let out=$("results");out.innerHTML="";results.forEach(g=>{let card=document.createElement("div");card.className="result";let im=document.createElement("img");im.alt=g.name;im.onerror=()=>{im.onerror=null;im.src=placeholder(g.key)};im.src=g.file[theme]||placeholder(g.key);let b=document.createElement("b");b.textContent=g.name+" · "+g.prize[theme];card.append(im,b);out.append(card)});show("summary")}
+$("again").onclick=()=>{qty=5;update();show("home")};update();
+</script></body></html>
