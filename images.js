@@ -12,9 +12,9 @@
 window.KUJI_IMAGES = {
   // 첫 화면 대표 이미지와 작품별 카드 이미지
   covers: {
-    h2h: "https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg", // Hearts2Hearts
+    h2h: "https://i.namu.wiki/i/2ZtiTWq8hkjJfjC0dWlf3AvhYkjJH3h1QdBuPN_fzmogtYwsleqALb_1bgIKV4qPi6pf-u0zAn1i5wp1a2A9Dw.webp", // Hearts2Hearts
     tuide: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png", // TUIDE
-    goldkamuy: "https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg" // 골든카무이
+    goldkamuy: "https://www.hakodate.travel/kr/wp-content/uploads/2026/04/20260401_PERMIT_HAKOSIN-1-1536x864.webp" // 골든카무이
   },
 
   // 스크래치 티켓과 당첨 결과 이미지. A~F는 당첨 등급입니다.
@@ -22,7 +22,7 @@ window.KUJI_IMAGES = {
   prizes: {
     A: {
       h2h: "https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg", // Hearts2Hearts
-      tuide: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png", // TUIDE
+      tuide: "https://i.namu.wiki/i/1qBrISPkirbOV5srCae76MYhZkuJS-NgBQPYcKg-GUpDpt6TAo2y54TWb4gUFAOoTxx7sDlWcQWg6o89rAk8fA.webp", // TUIDE
       goldkamuy: "https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg" // 골든카무이
     },
     B: {
