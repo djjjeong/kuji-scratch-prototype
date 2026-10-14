@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>KUJI SCRATCH</title>
 
-<!-- 외부 이미지 및 상품 데이터 파일 불러오기 -->
-<script src="./images.js?v=20261014-3"></script>
+<!-- 쿠지 및 상품 통합 설정 파일 -->
+<script src="./config.js?v=20261014-final"></script>
 
 <style>
 :root {
@@ -248,7 +248,7 @@ body {
 }
 
 /* ========================================================
-   현황판 SCREEN (잘림 방지 반응형 그리드 & 모바일 최적화)
+   현황판 SCREEN (수학적 50:50 고정 그리드 & 텍스트 2줄 랩)
    ======================================================== */
 .board-container {
   width: 100%;
@@ -319,7 +319,7 @@ body {
 }
 .board-counter-group .counter-val strong { color: #ffdc38; }
 
-/* Pegboard Grid — 잘림 방지 100% minmax(0, 1fr) */
+/* Pegboard Grid — 50% 50% 엄격 고정 */
 .board-peg-surface {
   width: 100%;
   box-sizing: border-box;
@@ -427,8 +427,8 @@ body {
   word-break: keep-all;
 }
 .board-card-thumb {
-  width: 25px;
-  height: 25px;
+  width: 26px;
+  height: 26px;
   object-fit: contain;
   background: #fff;
   border-radius: 4px;
@@ -463,9 +463,9 @@ body {
 }
 .ticket-slot {
   width: 6.5px;
-  height: 8.5px;
+  height: 8px;
   border-radius: 1px;
-  font-size: 5.5px;
+  font-size: 5px;
   font-weight: 900;
   display: flex;
   align-items: center;
@@ -491,7 +491,7 @@ body {
 }
 .remain-label { font-size: 6.5px; color: #6a7495; font-weight: 700; }
 .remain-count {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 1000;
   color: #0b1a4a;
 }
@@ -541,7 +541,7 @@ body {
 .scratchbox {
   position: relative;
   margin-top: 10px;
-  background: #16192e; /* 캔버스 로딩 중 밑바탕 암전 */
+  background: #16192e;
   border-radius: 14px;
   overflow: hidden;
   height: 260px;
@@ -553,7 +553,7 @@ body {
   object-fit: contain;
   background: #fff;
   border-radius: 14px;
-  opacity: 0; /* 캔버스 코팅이 완전히 칠해지기 전까지 100% 투명 숨김 */
+  opacity: 0;
   transition: opacity .12s ease;
 }
 .scratchbox canvas {
@@ -563,7 +563,7 @@ body {
   height: 100%;
   touch-action: none;
   border-radius: 14px;
-  z-index: 2; /* 캔버스가 항상 이미지 위에 완벽 밀착 */
+  z-index: 2;
 }
 
 .tag { display: inline-block; border-radius: 99px; background: #352d49; color: #fff; padding: 5px 10px; font-size: 11px; font-weight: 900; }
@@ -623,8 +623,8 @@ body {
     <div class="featured-shade"></div>
     <div class="featured-caption">
       <div>
-        <h2 id="featuredTitle">Hearts2Hearts</h2>
-        <p id="featuredDesc">GOODS COLLECTION</p>
+        <h2 id="featuredTitle">-</h2>
+        <p id="featuredDesc">-</p>
       </div>
       <div class="board-chip">현황판 보기 ↗</div>
     </div>
@@ -636,7 +636,7 @@ body {
   </div>
 
   <div class="kuji-list" id="lineupList">
-    <!-- Rendered dynamically from KUJI_DATA -->
+    <!-- config.js의 kujis 목록에서 동적 렌더링 -->
   </div>
 
   <div class="purchase-panel">
@@ -657,19 +657,19 @@ body {
 </section>
 
 <!-- ==============================================
-     SCREEN 2: 현황판 (잘림 방지 반응형)
+     SCREEN 2: 현황판
      ============================================== -->
 <section id="board" class="screen">
   <div class="board-container">
     <div class="board-header">
       <button class="board-back-btn" id="boardBackBtn" type="button">←</button>
       <div class="board-title-group">
-        <h1 id="boardThemeTitle">Hearts2Hearts</h1>
+        <h1 id="boardThemeTitle">-</h1>
       </div>
       <div class="board-counter-group">
         <span class="counter-lbl">잔여 / 총수량</span>
         <div class="counter-val">
-          <strong id="boardRemainCount">60</strong>/<span id="boardTotalCount">60</span>
+          <strong id="boardRemainCount">0</strong>/<span id="boardTotalCount">0</span>
         </div>
       </div>
     </div>
@@ -688,7 +688,7 @@ body {
 </section>
 
 <!-- ==============================================
-     SCREEN 3: SCRATCH (결과 사전 노출 100% 방지)
+     SCREEN 3: SCRATCH
      ============================================== -->
 <section id="scratch" class="screen">
   <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -723,72 +723,73 @@ body {
 
 <script>
 /* ========================================================
-   1. DATA INITIALIZATION & FALLBACK
+   1. CONFIGURATION & FALLBACK ENGINE
    ======================================================== */
-const defaultData = {
-  themes: {
-    h2h: {
-      name: "Hearts2Hearts",
+const fallbackConfig = {
+  defaultTheme: "h2h",
+  kujis: [
+    {
+      id: "h2h",
+      title: "Hearts2Hearts",
       sub: "PHOTO & GOODS",
       cover: "https://i.namu.wiki/i/2ZtiTWq8hkjJfjC0dWlf3AvhYkjJH3h1QdBuPN_fzmogtYwsleqALb_1bgIKV4qPi6pf-u0zAn1i5wp1a2A9Dw.webp",
+      price: 5000,
+      grades: [
+        { grade: "A", name: "A상 스페셜 굿즈", count: 1, image: "https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg" },
+        { grade: "B", name: "B상 포토카드 풀 세트", count: 2, image: "https://media.ktown4u.com/products/resize/thumbnail/2026/06/29/AH6JfX.png" },
+        { grade: "C", name: "C상 아크릴 키링 컬렉션", count: 4, image: "https://kplaceshop.com/cdn/shop/files/hearts2hearts-acrylic-keyring-2nd-mini-album-lemon-tang-pop-up-official-md-carmen-ver-main-image_600x.png?v=1783013031" },
+        { grade: "D", name: "D상 스페셜 일러스트 보드", count: 8, image: "https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg" },
+        { grade: "E", name: "E상 랜덤 스티커 & 포토 소품", count: 15, image: "https://media.ktown4u.com/products/resize/thumbnail/2026/06/29/AH6JfX.png" },
+        { grade: "F", name: "F상 데일리 타올 굿즈", count: 30, image: "https://kplaceshop.com/cdn/shop/files/hearts2hearts-acrylic-keyring-2nd-mini-album-lemon-tang-pop-up-official-md-carmen-ver-main-image_600x.png?v=1783013031" }
+      ],
       lastOne: { name: "라스트원상 스페셜 친필사인 포토보드", image: "https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg" },
       doubleChance: { name: "더블찬스 풀 패키지 굿즈 세트", image: "https://media.ktown4u.com/products/resize/thumbnail/2026/06/29/AH6JfX.png" }
-    },
-    tuide: {
-      name: "TUIDE",
-      sub: "ALBUM & GOODS",
-      cover: "https://dimg.donga.com/wps/NEWS/IMAGE/2026/08/25/134538691.1.jpg",
-      lastOne: { name: "라스트원상 한정 아크릴 디오라마", image: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png" },
-      doubleChance: { name: "더블찬스 친필 사인 앨범 풀 세트", image: "https://cdn-contents.weverseshop.io/public/shop/0d88dca6eb62e72c3bce249e096fe372.png" }
-    },
-    goldkamuy: {
-      name: "골든카무이",
-      sub: "ICHIBAN KUJI",
-      cover: "https://www.hakodate.travel/kr/wp-content/uploads/2026/04/20260401_PERMIT_HAKOSIN-1-1536x864.webp",
-      lastOne: { name: "라스트원상 오가타 햐쿠노스케 피규어 (라스트원 Ver.)", image: "https://actionfigurebrasil.com.br/cdn/shop/files/golden-kamuy-ogata-hyakunosuke-ichiban-kuji-ichiban-kuji-golden-kamuy-kinkai-soudatsusen-b-prize-masterlise-bandai-spirits-actionfigurebrasil-01_1024x1024.webp?v=1774221274" },
-      doubleChance: { name: "더블찬스 스기모토 & 오가타 스페셜 피규어 세트", image: "https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg" }
     }
-  },
-  grades: [
-    { key: "A", count: 1, prizes: { h2h: { name: "A상 스페셜 굿즈", image: "https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg" }, tuide: { name: "A상 스페셜 한정 앨범", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7jasaMg3-YhZEORwOQ9nSkI39LU7Q8jo9xlOWlEUAgjwqGvkKu0vZD4HJ&s=10" }, goldkamuy: { name: "A상 스기모토 사이치 피규어", image: "https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg" } } },
-    { key: "B", count: 2, prizes: { h2h: { name: "B상 포토카드 풀 세트", image: "https://media.ktown4u.com/products/resize/thumbnail/2026/06/29/AH6JfX.png" }, tuide: { name: "B상 포토카드 & 포토북 세트", image: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png" }, goldkamuy: { name: "B상 오가타 햐쿠노스케 피규어", image: "https://actionfigurebrasil.com.br/cdn/shop/files/golden-kamuy-ogata-hyakunosuke-ichiban-kuji-ichiban-kuji-golden-kamuy-kinkai-soudatsusen-b-prize-masterlise-bandai-spirits-actionfigurebrasil-01_1024x1024.webp?v=1774221274" } } },
-    { key: "C", count: 4, prizes: { h2h: { name: "C상 아크릴 키링 컬렉션", image: "https://kplaceshop.com/cdn/shop/files/hearts2hearts-acrylic-keyring-2nd-mini-album-lemon-tang-pop-up-official-md-carmen-ver-main-image_600x.png?v=1783013031" }, tuide: { name: "C상 미니 굿즈 컬렉션", image: "https://cdn.shopify.com/s/files/1/0675/8105/1017/files/1000016904_detail_044.jpg?v=1785782781&width=1500" }, goldkamuy: { name: "C상 카이조쿠 보타로 피규어", image: "https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg" } } },
-    { key: "D", count: 8, prizes: { h2h: { name: "D상 스페셜 일러스트 보드", image: "https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg" }, tuide: { name: "D상 앨범 일러스트 보드", image: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png" }, goldkamuy: { name: "D상 비주얼 일러스트 보드", image: "https://jumpichiban.com/cdn/shop/files/IchibanKujiGoldenKamuyGoldNuggetScramble-IPrizeVisualSheetCompleteSetof12_7.webp?v=1774572893&width=1000" } } },
-    { key: "E", count: 15, prizes: { h2h: { name: "E상 랜덤 스티커 & 포토 소품", image: "https://media.ktown4u.com/products/resize/thumbnail/2026/06/29/AH6JfX.png" }, tuide: { name: "E상 랜덤 스티커 컬렉션", image: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png" }, goldkamuy: { name: "E상 쵸코놋코 미니 피규어 (랜덤)", image: "https://pbs.twimg.com/media/HEFQfc8bsAATsES.jpg" } } },
-    { key: "F", count: 30, prizes: { h2h: { name: "F상 데일리 타올 굿즈", image: "https://kplaceshop.com/cdn/shop/files/hearts2hearts-acrylic-keyring-2nd-mini-album-lemon-tang-pop-up-official-md-carmen-ver-main-image_600x.png?v=1783013031" }, tuide: { name: "F상 클리어파일 & 타올 굿즈", image: "https://cdn-contents.weverseshop.io/public/shop/0d88dca6eb62e72c3bce249e096fe372.png" }, goldkamuy: { name: "F상 유리 컬렉션 (텀블러/접시)", image: "https://pbs.twimg.com/media/HEFQet5aoAAmwon.jpg" } } }
   ]
 };
 
-const AppData = (window.KUJI_DATA && window.KUJI_DATA.themes) ? window.KUJI_DATA : defaultData;
-const themes = AppData.themes;
-const grades = AppData.grades;
+const Config = (window.KUJI_CONFIG && window.KUJI_CONFIG.kujis) ? window.KUJI_CONFIG : fallbackConfig;
+const kujisList = Config.kujis;
+const kujiMap = {};
+kujisList.forEach(k => { kujiMap[k.id] = k; });
+
+let currentKujiId = Config.defaultTheme || kujisList[0].id;
+if (!kujiMap[currentKujiId]) currentKujiId = kujisList[0].id;
 
 /* ========================================================
-   2. BOX / INVENTORY STATE
+   2. BOX / INVENTORY STATE ENGINE
    ======================================================== */
 const themeBoxes = {};
-function initBox(tKey) {
+
+function initBox(kujiId) {
+  const k = kujiMap[kujiId];
+  if (!k) return;
   let tickets = [];
-  grades.forEach(g => {
+  k.grades.forEach(g => {
     for (let i = 0; i < g.count; i++) {
-      const pInfo = (g.prizes && g.prizes[tKey]) ? g.prizes[tKey] : { name: `${g.key}상`, image: "" };
       tickets.push({
-        key: g.key,
-        name: pInfo.name,
-        image: pInfo.image,
+        grade: g.grade,
+        name: g.name,
+        image: g.image,
         drawn: false
       });
     }
   });
+  // Shuffle tickets
   for (let i = tickets.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
     [tickets[i], tickets[j]] = [tickets[j], tickets[i]];
   }
-  themeBoxes[tKey] = { tickets, totalCount: tickets.length, lastOneAwarded: false };
+  themeBoxes[kujiId] = {
+    tickets: tickets,
+    totalCount: tickets.length,
+    lastOneAwarded: false
+  };
 }
-Object.keys(themes).forEach(initBox);
 
-let theme = "h2h", qty = 5, results = [], current = null, lastScreen = "home", idx = 0;
+kujisList.forEach(k => initBox(k.id));
+
+let qty = 5, results = [], current = null, lastScreen = "home", idx = 0;
 let ctx = null, down = false, last = null, checked = false;
 
 const $ = id => document.getElementById(id);
@@ -810,36 +811,36 @@ function show(id) {
 }
 
 /* ========================================================
-   3. HOME SCREEN
+   3. HOME SCREEN RENDER & INTERACTIONS
    ======================================================== */
 function renderLineup() {
   const list = $("lineupList");
   list.innerHTML = "";
-  Object.keys(themes).forEach(tKey => {
-    const t = themes[tKey];
-    const box = themeBoxes[tKey];
-    const rem = box.tickets.filter(tk => !tk.drawn).length;
+  kujisList.forEach(k => {
+    const box = themeBoxes[k.id];
+    const rem = box ? box.tickets.filter(tk => !tk.drawn).length : 0;
+    const priceText = won(k.price || 5000);
 
     const btn = document.createElement("button");
-    btn.className = "kuji-card" + (tKey === theme ? " selected" : "");
-    btn.dataset.theme = tKey;
+    btn.className = "kuji-card" + (k.id === currentKujiId ? " selected" : "");
+    btn.dataset.theme = k.id;
     btn.type = "button";
 
     btn.innerHTML = `
-      <img src="${t.cover || placeholder(t.name[0])}" alt="${t.name}" onerror="this.src='${placeholder(t.name[0])}'">
+      <img src="${k.cover || placeholder(k.title[0])}" alt="${k.title}" onerror="this.src='${placeholder(k.title[0])}'">
       <span class="kuji-copy">
-        <b>${t.name}</b>
-        <small>${t.sub}</small>
+        <b>${k.title}</b>
+        <small>${k.sub}</small>
         <span class="stock-row">
-          <span class="stock-tag" id="stockBadge-${tKey}">잔여 ${rem}/${box.totalCount}</span>
-          <span>1회 ₩5,000</span>
+          <span class="stock-tag" id="stockBadge-${k.id}">잔여 ${rem}/${box ? box.totalCount : 0}</span>
+          <span>1회 ${priceText}</span>
         </span>
       </span>
       <span style="color:var(--accent); font-size:20px;">›</span>
     `;
 
     btn.onclick = () => {
-      theme = tKey;
+      currentKujiId = k.id;
       update();
       updateFeatured();
     };
@@ -848,61 +849,68 @@ function renderLineup() {
 }
 
 function update() {
-  const box = themeBoxes[theme];
-  const rem = box.tickets.filter(t => !t.drawn).length;
-  $("qty").textContent = qty;
-  $("total").textContent = won(qty * 5000);
-  $("pay").disabled = (rem === 0);
-  $("pay").textContent = (rem === 0) ? "완판 (새 판 필요)" : "시작하기 →";
+  const k = kujiMap[currentKujiId];
+  const box = themeBoxes[currentKujiId];
+  const rem = box ? box.tickets.filter(t => !t.drawn).length : 0;
+  const unitPrice = k ? (k.price || 5000) : 5000;
 
-  Object.keys(themes).forEach(tKey => {
-    const b = themeBoxes[tKey];
-    const r = b.tickets.filter(t => !t.drawn).length;
-    const badge = $(`stockBadge-${tKey}`);
-    if (badge) badge.textContent = `잔여 ${r}/${b.totalCount}`;
+  $("qty").textContent = qty;
+  $("total").textContent = won(qty * unitPrice);
+  $("pay").disabled = (rem === 0);
+  $("pay").textContent = (rem === 0) ? "완판 (새 판 필요)" : `${won(qty * unitPrice)} 시작하기 →`;
+
+  kujisList.forEach(item => {
+    const b = themeBoxes[item.id];
+    const r = b ? b.tickets.filter(t => !t.drawn).length : 0;
+    const badge = $(`stockBadge-${item.id}`);
+    if (badge) badge.textContent = `잔여 ${r}/${b ? b.totalCount : 0}`;
   });
 
   document.querySelectorAll(".kuji-card").forEach(b => {
-    b.classList.toggle("selected", b.dataset.theme === theme);
+    b.classList.toggle("selected", b.dataset.theme === currentKujiId);
   });
 }
 
 function updateFeatured() {
-  const t = themes[theme];
+  const k = kujiMap[currentKujiId];
+  if (!k) return;
   const img = $("featuredImg");
-  img.onerror = () => { img.onerror = null; img.src = placeholder(t.name[0]); };
-  img.src = t.cover || placeholder(t.name[0]);
-  $("featuredTitle").textContent = t.name;
-  $("featuredDesc").textContent = t.sub;
+  img.onerror = () => { img.onerror = null; img.src = placeholder(k.title[0]); };
+  img.src = k.cover || placeholder(k.title[0]);
+  $("featuredTitle").textContent = k.title;
+  $("featuredDesc").textContent = k.sub;
 }
 
 $("minus").onclick = () => { qty = Math.max(1, qty - 1); update(); };
 $("plus").onclick = () => {
-  const rem = themeBoxes[theme].tickets.filter(t => !t.drawn).length;
+  const box = themeBoxes[currentKujiId];
+  const rem = box ? box.tickets.filter(t => !t.drawn).length : 1;
   qty = Math.min(Math.min(10, rem || 1), qty + 1);
   update();
 };
 
 /* ========================================================
-   4. 현황판 RENDER (잘림 없는 minmax 반응형 카드)
+   4. 현황판 RENDER (50:50 완벽 고정 & 동적 등급 지원)
    ======================================================== */
 function renderBoard() {
-  const t = themes[theme];
-  const box = themeBoxes[theme];
+  const k = kujiMap[currentKujiId];
+  const box = themeBoxes[currentKujiId];
+  if (!k || !box) return;
+
   const remaining = box.tickets.filter(t => !t.drawn);
 
-  $("boardThemeTitle").textContent = t.name;
+  $("boardThemeTitle").textContent = k.title;
   $("boardRemainCount").textContent = remaining.length;
   $("boardTotalCount").textContent = box.totalCount;
 
   const grid = $("boardGrid");
   grid.innerHTML = "";
 
-  grades.forEach(g => {
-    const remGrade = remaining.filter(tk => tk.key === g.key).length;
+  // 1. Regular Grades from config
+  k.grades.forEach(g => {
+    const remGrade = remaining.filter(tk => tk.grade === g.grade).length;
     const drawnGrade = g.count - remGrade;
     const isZero = (remGrade === 0);
-    const pInfo = (g.prizes && g.prizes[theme]) ? g.prizes[theme] : { name: `${g.key}상`, image: "" };
 
     const card = document.createElement("div");
     card.className = "board-card" + (isZero ? " soldout" : "");
@@ -912,14 +920,14 @@ function renderBoard() {
     top.innerHTML = `
       <div class="grade-medal">
         <div class="grade-medal-inner">
-          <span class="medal-letter">${g.key}</span>
+          <span class="medal-letter">${g.grade}</span>
           <span class="medal-sub">상</span>
         </div>
       </div>
       <div class="board-card-info">
-        <div class="board-card-title">${pInfo.name}</div>
+        <div class="board-card-title">${g.name}</div>
       </div>
-      <img class="board-card-thumb" src="${pInfo.image || placeholder(g.key)}" alt="${g.key}" onerror="this.src='${placeholder(g.key)}'">
+      <img class="board-card-thumb" src="${g.image || placeholder(g.grade)}" alt="${g.grade}" onerror="this.src='${placeholder(g.grade)}'">
     `;
 
     const bottom = document.createElement("div");
@@ -928,10 +936,10 @@ function renderBoard() {
     const strip = document.createElement("div");
     strip.className = "ticket-strip";
     for (let i = 0; i < remGrade; i++) {
-      strip.innerHTML += `<span class="ticket-slot active">${g.key}</span>`;
+      strip.innerHTML += `<span class="ticket-slot active">${g.grade}</span>`;
     }
     for (let i = 0; i < drawnGrade; i++) {
-      strip.innerHTML += `<span class="ticket-slot drawn">${g.key}</span>`;
+      strip.innerHTML += `<span class="ticket-slot drawn">${g.grade}</span>`;
     }
 
     const remainBox = document.createElement("div");
@@ -947,46 +955,50 @@ function renderBoard() {
     grid.appendChild(card);
   });
 
-  // Last One Card
-  const lastCard = document.createElement("div");
-  lastCard.className = "board-card";
-  const loStatus = box.lastOneAwarded ? "완료" : "1";
-  lastCard.innerHTML = `
-    <div class="board-card-top">
-      <div class="grade-medal last-one">
-        <div class="grade-medal-inner"><span class="medal-letter">LAST</span></div>
+  // 2. Last One Card
+  if (k.lastOne) {
+    const lastCard = document.createElement("div");
+    lastCard.className = "board-card";
+    const loStatus = box.lastOneAwarded ? "완료" : "1";
+    lastCard.innerHTML = `
+      <div class="board-card-top">
+        <div class="grade-medal last-one">
+          <div class="grade-medal-inner"><span class="medal-letter">LAST</span></div>
+        </div>
+        <div class="board-card-info">
+          <div class="board-card-title">${k.lastOne.name}</div>
+        </div>
+        <img class="board-card-thumb" src="${k.lastOne.image}" alt="LAST" onerror="this.src='${placeholder("L")}'">
       </div>
-      <div class="board-card-info">
-        <div class="board-card-title">${t.lastOne.name}</div>
+      <div class="board-card-bottom">
+        <span style="font-size:7px; color:#d81b60; font-weight:800; white-space:nowrap;">마지막 1장 지급</span>
+        <div class="remain-box"><span class="remain-label">잔여</span><span class="remain-count" style="color:#d81b60">${loStatus}</span></div>
       </div>
-      <img class="board-card-thumb" src="${t.lastOne.image}" alt="LAST" onerror="this.src='${placeholder("L")}'">
-    </div>
-    <div class="board-card-bottom">
-      <span style="font-size:7px; color:#d81b60; font-weight:800; white-space:nowrap;">마지막 1장 지급</span>
-      <div class="remain-box"><span class="remain-label">잔여</span><span class="remain-count" style="color:#d81b60">${loStatus}</span></div>
-    </div>
-  `;
-  grid.appendChild(lastCard);
+    `;
+    grid.appendChild(lastCard);
+  }
 
-  // Double Chance Card
-  const dcCard = document.createElement("div");
-  dcCard.className = "board-card";
-  dcCard.innerHTML = `
-    <div class="board-card-top">
-      <div class="grade-medal double-chance">
-        <div class="grade-medal-inner"><span class="medal-letter">W</span></div>
+  // 3. Double Chance Card
+  if (k.doubleChance) {
+    const dcCard = document.createElement("div");
+    dcCard.className = "board-card";
+    dcCard.innerHTML = `
+      <div class="board-card-top">
+        <div class="grade-medal double-chance">
+          <div class="grade-medal-inner"><span class="medal-letter">W</span></div>
+        </div>
+        <div class="board-card-info">
+          <div class="board-card-title">${k.doubleChance.name}</div>
+        </div>
+        <img class="board-card-thumb" src="${k.doubleChance.image}" alt="W" onerror="this.src='${placeholder("W")}'">
       </div>
-      <div class="board-card-info">
-        <div class="board-card-title">${t.doubleChance.name}</div>
+      <div class="board-card-bottom">
+        <span style="font-size:7px; color:#72f7d1; font-weight:800; white-space:nowrap;">추첨권</span>
+        <div class="remain-box"><span class="remain-label" style="font-size:7px;">추첨</span></div>
       </div>
-      <img class="board-card-thumb" src="${t.doubleChance.image}" alt="W" onerror="this.src='${placeholder("W")}'">
-    </div>
-    <div class="board-card-bottom">
-      <span style="font-size:7px; color:#72f7d1; font-weight:800; white-space:nowrap;">추첨권</span>
-      <div class="remain-box"><span class="remain-label" style="font-size:7px;">추첨</span></div>
-    </div>
-  `;
-  grid.appendChild(dcCard);
+    `;
+    grid.appendChild(dcCard);
+  }
 }
 
 $("boardBackBtn").onclick = () => show(lastScreen || "home");
@@ -1002,18 +1014,20 @@ $("btnDrawFromBoard").onclick = () => {
 };
 
 $("btnResetBox").onclick = () => {
-  if (confirm(`'${themes[theme].name}' 판을 60매로 초기화할까요?`)) {
-    initBox(theme);
+  const k = kujiMap[currentKujiId];
+  if (confirm(`'${k.title}' 판을 새 박스로 초기화할까요?`)) {
+    initBox(currentKujiId);
     update();
     renderBoard();
   }
 };
 
 /* ========================================================
-   5. SCRATCH ENGINE (결과 사전 노출 원천 차단)
+   5. SCRATCH ENGINE (사전 노출 100% 방지)
    ======================================================== */
 $("pay").onclick = () => {
-  const box = themeBoxes[theme];
+  const k = kujiMap[currentKujiId];
+  const box = themeBoxes[currentKujiId];
   const unDrawn = box.tickets.filter(t => !t.drawn);
   if (!unDrawn.length) {
     alert("판이 완판되었습니다. 새 판을 개봉해주세요!");
@@ -1029,12 +1043,12 @@ $("pay").onclick = () => {
     picked.drawn = true;
     results.push(picked);
 
-    if (box.tickets.filter(t => !t.drawn).length === 0 && !box.lastOneAwarded) {
+    if (box.tickets.filter(t => !t.drawn).length === 0 && !box.lastOneAwarded && k.lastOne) {
       box.lastOneAwarded = true;
       results.push({
-        key: "LAST",
-        name: themes[theme].lastOne.name,
-        image: themes[theme].lastOne.image,
+        grade: "LAST",
+        name: k.lastOne.name,
+        image: k.lastOne.image,
         isLastOne: true
       });
     }
@@ -1047,7 +1061,7 @@ function begin() {
   if (idx >= results.length) { summary(); return; }
   current = results[idx];
 
-  // [차단 1] 화면 전환 전, 이전/새 상품 이미지와 텍스트를 즉시 100% 암전 은폐
+  // 이미지 및 텍스트 100% 암전 은폐
   const im = $("prizeImg");
   im.style.opacity = "0";
   im.src = "";
@@ -1062,7 +1076,6 @@ function begin() {
 
   show("scratch");
 
-  // 화면이 렌더링된 직후 캔버스 불투명 코팅을 먼저 완성하고 이미지를 뒤에 배치
   requestAnimationFrame(() => {
     setupCanvas();
   });
@@ -1084,7 +1097,7 @@ function setupCanvas() {
   ctx = can.getContext("2d");
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  // [차단 2] 100% 완벽한 불투명 실버 메탈릭 코팅을 먼저 화면 전체에 도포
+  // 불투명 은색 코팅 100% 도포
   ctx.globalCompositeOperation = "source-over";
   let grad = ctx.createLinearGradient(0, 0, w, h);
   grad.addColorStop(0, "#c2c1be");
@@ -1103,12 +1116,11 @@ function setupCanvas() {
 
   checked = false;
 
-  // [차단 3] 캔버스 코팅이 완전히 덮인 것을 확인한 뒤에야 상품 이미지를 캔버스 뒤(z-index: 1)에 안전 로딩
+  // 코팅 완료 후 이미지를 캔버스 뒤에 배치
   const im = $("prizeImg");
-  const fb = placeholder(current.key || "A");
+  const fb = placeholder(current.grade || "A");
   im.onerror = () => { im.onerror = null; im.src = fb; };
   im.src = current.image || fb;
-  // 캔버스 코팅 뒤에서 부드럽게 대기 (사용자는 오직 은색 코팅만 보임)
   im.style.opacity = "1";
 }
 
@@ -1137,7 +1149,7 @@ function reveal() {
   checked = true; down = false; last = null;
   ctx.clearRect(0, 0, $("scratchCanvas").width, $("scratchCanvas").height);
   $("prizeMeta").style.visibility = "visible";
-  $("grade").textContent = current.key === "LAST" ? "LAST ONE" : current.key + "상";
+  $("grade").textContent = current.grade === "LAST" ? "LAST ONE" : current.grade + "상";
   $("prizeName").textContent = current.name;
   $("next").disabled = false;
   idx++;
@@ -1172,7 +1184,7 @@ function summary() {
     card.className = "result";
     let im = document.createElement("img");
     im.alt = g.name;
-    const fb = placeholder(g.key || "A");
+    const fb = placeholder(g.grade || "A");
     im.onerror = () => { im.onerror = null; im.src = fb; };
     im.src = g.image || fb;
 
@@ -1191,7 +1203,7 @@ function summary() {
 
 $("again").onclick = () => { qty = 5; update(); show("home"); };
 
-// Start App
+// Initialize App
 renderLineup();
 update();
 updateFeatured();
