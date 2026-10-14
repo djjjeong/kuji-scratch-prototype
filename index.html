@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>KUJI SCRATCH</title>
+
+<!-- 외부 이미지 및 상품 데이터 파일 불러오기 -->
+<script src="./images.js"></script>
+
 <style>
 :root {
   --ink: #f7f4ff;
@@ -574,45 +578,8 @@ body {
     <button class="pill" id="lineupBoardBtn" type="button">📊 현황판</button>
   </div>
 
-  <div class="kuji-list">
-    <button class="kuji-card selected" data-theme="h2h" type="button">
-      <img src="https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg" alt="Hearts2Hearts">
-      <span class="kuji-copy">
-        <b>Hearts2Hearts</b>
-        <small>PHOTO & GOODS</small>
-        <span class="stock-row">
-          <span class="stock-tag" id="stockBadge-h2h">잔여 60/60</span>
-          <span>1회 ₩5,000</span>
-        </span>
-      </span>
-      <span style="color:var(--accent); font-size:20px;">›</span>
-    </button>
-
-    <button class="kuji-card" data-theme="tuide" type="button">
-      <img src="https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png" alt="TUIDE">
-      <span class="kuji-copy">
-        <b>TUIDE</b>
-        <small>ALBUM & GOODS</small>
-        <span class="stock-row">
-          <span class="stock-tag" id="stockBadge-tuide">잔여 60/60</span>
-          <span>1회 ₩5,000</span>
-        </span>
-      </span>
-      <span style="color:var(--accent); font-size:20px;">›</span>
-    </button>
-
-    <button class="kuji-card" data-theme="goldkamuy" type="button">
-      <img src="https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg" alt="골든카무이">
-      <span class="kuji-copy">
-        <b>골든카무이</b>
-        <small>ICHIBAN KUJI</small>
-        <span class="stock-row">
-          <span class="stock-tag" id="stockBadge-goldkamuy">잔여 60/60</span>
-          <span>1회 ₩5,000</span>
-        </span>
-      </span>
-      <span style="color:var(--accent); font-size:20px;">›</span>
-    </button>
+  <div class="kuji-list" id="lineupList">
+    <!-- Rendered dynamically from KUJI_DATA -->
   </div>
 
   <div class="purchase-panel">
@@ -698,44 +665,65 @@ body {
 </main>
 
 <script>
-const themes = {
-  h2h: {
-    name: "Hearts2Hearts",
-    short: "H2H",
-    banner: "https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg",
-    lastOne: { name: "라스트원상 사인 보드", file: "https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg" },
-    doubleChance: { name: "더블찬스 풀 패키지", file: "https://media.ktown4u.com/products/resize/thumbnail/2026/06/29/AH6JfX.png" }
+/* ========================================================
+   1. DATA INITIALIZATION & FALLBACK
+   images.js의 window.KUJI_DATA를 불러오며, 없을 경우 대비
+   ======================================================== */
+const defaultData = {
+  themes: {
+    h2h: {
+      name: "Hearts2Hearts",
+      sub: "PHOTO & GOODS",
+      cover: "https://i.namu.wiki/i/2ZtiTWq8hkjJfjC0dWlf3AvhYkjJH3h1QdBuPN_fzmogtYwsleqALb_1bgIKV4qPi6pf-u0zAn1i5wp1a2A9Dw.webp",
+      lastOne: { name: "라스트원상 스페셜 친필사인 포토보드", image: "https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg" },
+      doubleChance: { name: "더블찬스 풀 패키지 굿즈 세트", image: "https://media.ktown4u.com/products/resize/thumbnail/2026/06/29/AH6JfX.png" }
+    },
+    tuide: {
+      name: "TUIDE",
+      sub: "ALBUM & GOODS",
+      cover: "https://dimg.donga.com/wps/NEWS/IMAGE/2026/08/25/134538691.1.jpg",
+      lastOne: { name: "라스트원상 한정 아크릴 디오라마", image: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png" },
+      doubleChance: { name: "더블찬스 친필 사인 앨범 풀 세트", image: "https://cdn-contents.weverseshop.io/public/shop/0d88dca6eb62e72c3bce249e096fe372.png" }
+    },
+    goldkamuy: {
+      name: "골든카무이",
+      sub: "ICHIBAN KUJI",
+      cover: "https://www.hakodate.travel/kr/wp-content/uploads/2026/04/20260401_PERMIT_HAKOSIN-1-1536x864.webp",
+      lastOne: { name: "라스트원상 오가타 햐쿠노스케 피규어 (라스트원 Ver.)", image: "https://actionfigurebrasil.com.br/cdn/shop/files/golden-kamuy-ogata-hyakunosuke-ichiban-kuji-ichiban-kuji-golden-kamuy-kinkai-soudatsusen-b-prize-masterlise-bandai-spirits-actionfigurebrasil-01_1024x1024.webp?v=1774221274" },
+      doubleChance: { name: "더블찬스 스기모토 & 오가타 스페셜 피규어 세트", image: "https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg" }
+    }
   },
-  tuide: {
-    name: "TUIDE",
-    short: "TUIDE",
-    banner: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png",
-    lastOne: { name: "라스트원상 아크릴", file: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png" },
-    doubleChance: { name: "더블찬스 사인 앨범", file: "https://cdn-contents.weverseshop.io/public/shop/0d88dca6eb62e72c3bce249e096fe372.png" }
-  },
-  goldkamuy: {
-    name: "골든카무이",
-    short: "골든카무이",
-    banner: "https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg",
-    lastOne: { name: "라스트원상 오가타", file: "https://actionfigurebrasil.com.br/cdn/shop/files/golden-kamuy-ogata-hyakunosuke-ichiban-kuji-ichiban-kuji-golden-kamuy-kinkai-soudatsusen-b-prize-masterlise-bandai-spirits-actionfigurebrasil-01_1024x1024.webp?v=1774221274" },
-    doubleChance: { name: "더블찬스 피규어", file: "https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg" }
-  }
+  grades: [
+    { key: "A", count: 1, prizes: { h2h: { name: "A상 스페셜 굿즈", image: "https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg" }, tuide: { name: "A상 스페셜 한정 앨범", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7jasaMg3-YhZEORwOQ9nSkI39LU7Q8jo9xlOWlEUAgjwqGvkKu0vZD4HJ&s=10" }, goldkamuy: { name: "A상 스기모토 사이치 피규어", image: "https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg" } } },
+    { key: "B", count: 2, prizes: { h2h: { name: "B상 포토카드 풀 세트", image: "https://media.ktown4u.com/products/resize/thumbnail/2026/06/29/AH6JfX.png" }, tuide: { name: "B상 포토카드 & 포토북 세트", image: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png" }, goldkamuy: { name: "B상 오가타 햐쿠노스케 피규어", image: "https://actionfigurebrasil.com.br/cdn/shop/files/golden-kamuy-ogata-hyakunosuke-ichiban-kuji-ichiban-kuji-golden-kamuy-kinkai-soudatsusen-b-prize-masterlise-bandai-spirits-actionfigurebrasil-01_1024x1024.webp?v=1774221274" } } },
+    { key: "C", count: 4, prizes: { h2h: { name: "C상 아크릴 키링 컬렉션", image: "https://kplaceshop.com/cdn/shop/files/hearts2hearts-acrylic-keyring-2nd-mini-album-lemon-tang-pop-up-official-md-carmen-ver-main-image_600x.png?v=1783013031" }, tuide: { name: "C상 미니 굿즈 컬렉션", image: "https://cdn.shopify.com/s/files/1/0675/8105/1017/files/1000016904_detail_044.jpg?v=1785782781&width=1500" }, goldkamuy: { name: "C상 카이조쿠 보타로 피규어", image: "https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg" } } },
+    { key: "D", count: 8, prizes: { h2h: { name: "D상 스페셜 일러스트 보드", image: "https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg" }, tuide: { name: "D상 앨범 일러스트 보드", image: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png" }, goldkamuy: { name: "D상 비주얼 일러스트 보드", image: "https://jumpichiban.com/cdn/shop/files/IchibanKujiGoldenKamuyGoldNuggetScramble-IPrizeVisualSheetCompleteSetof12_7.webp?v=1774572893&width=1000" } } },
+    { key: "E", count: 15, prizes: { h2h: { name: "E상 랜덤 스티커 & 포토 소품", image: "https://media.ktown4u.com/products/resize/thumbnail/2026/06/29/AH6JfX.png" }, tuide: { name: "E상 랜덤 스티커 컬렉션", image: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png" }, goldkamuy: { name: "E상 쵸코놋코 미니 피규어 (랜덤)", image: "https://pbs.twimg.com/media/HEFQfc8bsAATsES.jpg" } } },
+    { key: "F", count: 30, prizes: { h2h: { name: "F상 데일리 타올 굿즈", image: "https://kplaceshop.com/cdn/shop/files/hearts2hearts-acrylic-keyring-2nd-mini-album-lemon-tang-pop-up-official-md-carmen-ver-main-image_600x.png?v=1783013031" }, tuide: { name: "F상 클리어파일 & 타올 굿즈", image: "https://cdn-contents.weverseshop.io/public/shop/0d88dca6eb62e72c3bce249e096fe372.png" }, goldkamuy: { name: "F상 유리 컬렉션 (텀블러/접시)", image: "https://pbs.twimg.com/media/HEFQet5aoAAmwon.jpg" } } }
+  ]
 };
 
-const grades = [
-  { key: "A", name: "A상", prize: { h2h: "스페셜 굿즈", tuide: "스페셜 앨범", goldkamuy: "스기모토 피규어" }, count: 1, file: { h2h: "https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg", tuide: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png", goldkamuy: "https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg" } },
-  { key: "B", name: "B상", prize: { h2h: "포토카드 세트", tuide: "포토북 세트", goldkamuy: "오가타 피규어" }, count: 2, file: { h2h: "https://media.ktown4u.com/products/resize/thumbnail/2026/06/29/AH6JfX.png", tuide: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png", goldkamuy: "https://actionfigurebrasil.com.br/cdn/shop/files/golden-kamuy-ogata-hyakunosuke-ichiban-kuji-ichiban-kuji-golden-kamuy-kinkai-soudatsusen-b-prize-masterlise-bandai-spirits-actionfigurebrasil-01_1024x1024.webp?v=1774221274" } },
-  { key: "C", name: "C상", prize: { h2h: "아크릴 키링", tuide: "미니 굿즈", goldkamuy: "보타로 피규어" }, count: 4, file: { h2h: "https://kplaceshop.com/cdn/shop/files/hearts2hearts-acrylic-keyring-2nd-mini-album-lemon-tang-pop-up-official-md-carmen-ver-main-image_600x.png?v=1783013031", tuide: "https://cdn.shopify.com/s/files/1/0675/8105/1017/files/1000016904_detail_044.jpg?v=1785782781&width=1500", goldkamuy: "https://pbs.twimg.com/media/G5D83vRa4AAL_P0.jpg" } },
-  { key: "D", name: "D상", prize: { h2h: "일러스트 보드", tuide: "일러스트 굿즈", goldkamuy: "일러스트 보드" }, count: 8, file: { h2h: "https://fcdn2.smtown-official.jp/files/images/2141_4ccd9d0a27809492fd3ccb3b8be86b84.jpg", tuide: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png", goldkamuy: "https://jumpichiban.com/cdn/shop/files/IchibanKujiGoldenKamuyGoldNuggetScramble-IPrizeVisualSheetCompleteSetof12_7.webp?v=1774572893&width=1000" } },
-  { key: "E", name: "E상", prize: { h2h: "스티커 세트", tuide: "포토 소품", goldkamuy: "미니 피규어" }, count: 15, file: { h2h: "https://media.ktown4u.com/products/resize/thumbnail/2026/06/29/AH6JfX.png", tuide: "https://cdn-contents.weverseshop.io/public/shop/ec6db57bfb9f528544b42d75c704ef92.png", goldkamuy: "https://pbs.twimg.com/media/HEFQfc8bsAATsES.jpg" } },
-  { key: "F", name: "F상", prize: { h2h: "타올 굿즈", tuide: "클리어파일", goldkamuy: "유리 컬렉션" }, count: 30, file: { h2h: "https://kplaceshop.com/cdn/shop/files/hearts2hearts-acrylic-keyring-2nd-mini-album-lemon-tang-pop-up-official-md-carmen-ver-main-image_600x.png?v=1783013031", tuide: "https://cdn-contents.weverseshop.io/public/shop/0d88dca6eb62e72c3bce249e096fe372.png", goldkamuy: "https://pbs.twimg.com/media/HEFQet5aoAAmwon.jpg" } }
-];
+// images.js 로드 여부 검사 및 데이터 바인딩
+const AppData = (window.KUJI_DATA && window.KUJI_DATA.themes) ? window.KUJI_DATA : defaultData;
+const themes = AppData.themes;
+const grades = AppData.grades;
 
+/* ========================================================
+   2. BOX / INVENTORY STATE
+   ======================================================== */
 const themeBoxes = {};
 function initBox(tKey) {
   let tickets = [];
   grades.forEach(g => {
-    for (let i = 0; i < g.count; i++) tickets.push({ ...g, drawn: false });
+    for (let i = 0; i < g.count; i++) {
+      const pInfo = (g.prizes && g.prizes[tKey]) ? g.prizes[tKey] : { name: `${g.key}상`, image: "" };
+      tickets.push({
+        key: g.key,
+        name: pInfo.name,
+        image: pInfo.image,
+        drawn: false
+      });
+    }
   });
   for (let i = tickets.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
@@ -745,13 +733,16 @@ function initBox(tKey) {
 }
 Object.keys(themes).forEach(initBox);
 
-let theme = "h2h", qty = 5, purchased = 0, results = [], current = null, lastScreen = "home", idx = 0;
+let theme = "h2h", qty = 5, results = [], current = null, lastScreen = "home", idx = 0;
 let ctx = null, down = false, last = null, checked = false;
-const $ = id => document.getElementById(id), won = n => "₩ " + n.toLocaleString("ko-KR");
 
-function placeholder(g) {
+const $ = id => document.getElementById(id);
+const won = n => "₩ " + n.toLocaleString("ko-KR");
+
+function placeholder(text) {
   let colors = { A: "#f6d8a8", B: "#d9e8ff", C: "#e7d7f7", D: "#ffe2e5", E: "#d9f0df", F: "#ece8e0" };
-  return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" rx="16" fill="${colors[g]||"#e4e7f8"}"/><text x="150" y="170" text-anchor="middle" font-size="70" font-family="sans-serif" font-weight="900" fill="#222">${g}</text></svg>`);
+  const bg = colors[text] || "#e4e7f8";
+  return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" rx="16" fill="${bg}"/><text x="150" y="170" text-anchor="middle" font-size="70" font-family="sans-serif" font-weight="900" fill="#222">${text}</text></svg>`);
 }
 
 function show(id) {
@@ -761,6 +752,44 @@ function show(id) {
   $(id).classList.add("active");
   window.scrollTo(0, 0);
   if (id === "board") renderBoard();
+}
+
+/* ========================================================
+   3. HOME SCREEN RENDER & CONTROLS
+   ======================================================== */
+function renderLineup() {
+  const list = $("lineupList");
+  list.innerHTML = "";
+  Object.keys(themes).forEach(tKey => {
+    const t = themes[tKey];
+    const box = themeBoxes[tKey];
+    const rem = box.tickets.filter(tk => !tk.drawn).length;
+
+    const btn = document.createElement("button");
+    btn.className = "kuji-card" + (tKey === theme ? " selected" : "");
+    btn.dataset.theme = tKey;
+    btn.type = "button";
+
+    btn.innerHTML = `
+      <img src="${t.cover || placeholder(t.name[0])}" alt="${t.name}" onerror="this.src='${placeholder(t.name[0])}'">
+      <span class="kuji-copy">
+        <b>${t.name}</b>
+        <small>${t.sub}</small>
+        <span class="stock-row">
+          <span class="stock-tag" id="stockBadge-${tKey}">잔여 ${rem}/${box.totalCount}</span>
+          <span>1회 ₩5,000</span>
+        </span>
+      </span>
+      <span style="color:var(--accent); font-size:20px;">›</span>
+    `;
+
+    btn.onclick = () => {
+      theme = tKey;
+      update();
+      updateFeatured();
+    };
+    list.appendChild(btn);
+  });
 }
 
 function update() {
@@ -777,26 +806,20 @@ function update() {
     const badge = $(`stockBadge-${tKey}`);
     if (badge) badge.textContent = `잔여 ${r}/${b.totalCount}`;
   });
-  document.querySelectorAll(".kuji-card").forEach(b => b.classList.toggle("selected", b.dataset.theme === theme));
+
+  document.querySelectorAll(".kuji-card").forEach(b => {
+    b.classList.toggle("selected", b.dataset.theme === theme);
+  });
 }
 
 function updateFeatured() {
   const t = themes[theme];
-  const first = grades.find(g => g.file[theme]);
   const img = $("featuredImg");
-  img.onerror = () => { img.onerror = null; img.src = placeholder("A"); };
-  img.src = first.file[theme] || placeholder("A");
+  img.onerror = () => { img.onerror = null; img.src = placeholder(t.name[0]); };
+  img.src = t.cover || placeholder(t.name[0]);
   $("featuredTitle").textContent = t.name;
-  $("featuredDesc").textContent = t.name + " COLLECTION";
+  $("featuredDesc").textContent = t.sub;
 }
-
-document.querySelectorAll(".kuji-card").forEach(b => {
-  b.onclick = () => {
-    theme = b.dataset.theme;
-    update();
-    updateFeatured();
-  };
-});
 
 $("minus").onclick = () => { qty = Math.max(1, qty - 1); update(); };
 $("plus").onclick = () => {
@@ -805,12 +828,14 @@ $("plus").onclick = () => {
   update();
 };
 
-/* Render Board (2/3 compact text & NO store meta) */
+/* ========================================================
+   4. 현황판 SCREEN RENDER (images.js 연동 & 2/3 컴팩트)
+   ======================================================== */
 function renderBoard() {
   const t = themes[theme];
   const box = themeBoxes[theme];
   const remaining = box.tickets.filter(t => !t.drawn);
-  
+
   $("boardThemeTitle").textContent = t.name;
   $("boardRemainCount").textContent = remaining.length;
   $("boardTotalCount").textContent = box.totalCount;
@@ -822,6 +847,7 @@ function renderBoard() {
     const remGrade = remaining.filter(tk => tk.key === g.key).length;
     const drawnGrade = g.count - remGrade;
     const isZero = (remGrade === 0);
+    const pInfo = (g.prizes && g.prizes[theme]) ? g.prizes[theme] : { name: `${g.key}상`, image: "" };
 
     const card = document.createElement("div");
     card.className = "board-card" + (isZero ? " soldout" : "");
@@ -836,9 +862,9 @@ function renderBoard() {
         </div>
       </div>
       <div class="board-card-info">
-        <div class="board-card-title">${g.name} ${g.prize[theme]}</div>
+        <div class="board-card-title">${pInfo.name}</div>
       </div>
-      <img class="board-card-thumb" src="${g.file[theme] || placeholder(g.key)}" alt="${g.key}" onerror="this.src='${placeholder(g.key)}'">
+      <img class="board-card-thumb" src="${pInfo.image || placeholder(g.key)}" alt="${g.key}" onerror="this.src='${placeholder(g.key)}'">
     `;
 
     const bottom = document.createElement("div");
@@ -846,8 +872,12 @@ function renderBoard() {
 
     const strip = document.createElement("div");
     strip.className = "ticket-strip";
-    for (let i = 0; i < remGrade; i++) strip.innerHTML += `<span class="ticket-slot active">${g.key}</span>`;
-    for (let i = 0; i < drawnGrade; i++) strip.innerHTML += `<span class="ticket-slot drawn">${g.key}</span>`;
+    for (let i = 0; i < remGrade; i++) {
+      strip.innerHTML += `<span class="ticket-slot active">${g.key}</span>`;
+    }
+    for (let i = 0; i < drawnGrade; i++) {
+      strip.innerHTML += `<span class="ticket-slot drawn">${g.key}</span>`;
+    }
 
     const remainBox = document.createElement("div");
     remainBox.className = "remain-box";
@@ -874,7 +904,7 @@ function renderBoard() {
       <div class="board-card-info">
         <div class="board-card-title">${t.lastOne.name}</div>
       </div>
-      <img class="board-card-thumb" src="${t.lastOne.file}" alt="LAST" onerror="this.src='${placeholder("A")}'">
+      <img class="board-card-thumb" src="${t.lastOne.image}" alt="LAST" onerror="this.src='${placeholder("L")}'">
     </div>
     <div class="board-card-bottom">
       <span style="font-size:7.5px; color:#d81b60; font-weight:800;">마지막 1장 지급</span>
@@ -894,7 +924,7 @@ function renderBoard() {
       <div class="board-card-info">
         <div class="board-card-title">${t.doubleChance.name}</div>
       </div>
-      <img class="board-card-thumb" src="${t.doubleChance.file}" alt="W" onerror="this.src='${placeholder("B")}'">
+      <img class="board-card-thumb" src="${t.doubleChance.image}" alt="W" onerror="this.src='${placeholder("W")}'">
     </div>
     <div class="board-card-bottom">
       <span style="font-size:7.5px; color:#72f7d1; font-weight:800;">추첨권</span>
@@ -924,7 +954,9 @@ $("btnResetBox").onclick = () => {
   }
 };
 
-/* Scratch Logic */
+/* ========================================================
+   5. SCRATCH ENGINE & RESULTS
+   ======================================================== */
 $("pay").onclick = () => {
   const box = themeBoxes[theme];
   const unDrawn = box.tickets.filter(t => !t.drawn);
@@ -944,7 +976,12 @@ $("pay").onclick = () => {
 
     if (box.tickets.filter(t => !t.drawn).length === 0 && !box.lastOneAwarded) {
       box.lastOneAwarded = true;
-      results.push({ key: "LAST", name: "LAST-ONE상", prize: { [theme]: themes[theme].lastOne.name }, file: { [theme]: themes[theme].lastOne.file }, isLastOne: true });
+      results.push({
+        key: "LAST",
+        name: themes[theme].lastOne.name,
+        image: themes[theme].lastOne.image,
+        isLastOne: true
+      });
     }
   }
   idx = 0;
@@ -958,9 +995,9 @@ function begin() {
   $("progress").textContent = (idx + 1) + " / " + results.length;
 
   const im = $("prizeImg");
-  const fb = placeholder(current.key === "LAST" ? "A" : current.key);
+  const fb = placeholder(current.key || "A");
   im.onerror = () => { im.onerror = null; im.src = fb; };
-  im.src = (current.file && current.file[theme]) || fb;
+  im.src = current.image || fb;
 
   $("next").disabled = true;
   $("next").textContent = (idx + 1 === results.length) ? "결과 보기" : "다음 티켓";
@@ -1013,10 +1050,9 @@ function reveal() {
   if (checked || !current) return;
   checked = true; down = false; last = null;
   ctx.clearRect(0, 0, $("scratchCanvas").width, $("scratchCanvas").height);
-  const prizeText = current.prize[theme] || current.prize;
   $("prizeMeta").style.visibility = "visible";
-  $("grade").textContent = current.name;
-  $("prizeName").textContent = prizeText;
+  $("grade").textContent = current.key === "LAST" ? "LAST ONE" : current.key + "상";
+  $("prizeName").textContent = current.name;
   $("next").disabled = false;
   idx++;
 }
@@ -1050,14 +1086,16 @@ function summary() {
     card.className = "result";
     let im = document.createElement("img");
     im.alt = g.name;
-    const fb = placeholder(g.key === "LAST" ? "A" : g.key);
+    const fb = placeholder(g.key || "A");
     im.onerror = () => { im.onerror = null; im.src = fb; };
-    im.src = (g.file && g.file[theme]) || fb;
+    im.src = g.image || fb;
 
     let b = document.createElement("b");
-    const prizeText = g.prize[theme] || g.prize;
-    b.textContent = g.name + " " + prizeText;
-    if (g.isLastOne) { b.style.color = "#ff3377"; b.textContent = "★ 라스트원상 " + prizeText; }
+    b.textContent = g.name;
+    if (g.isLastOne) {
+      b.style.color = "#ff3377";
+      b.textContent = "★ " + g.name;
+    }
     card.append(im, b);
     out.append(card);
   });
@@ -1067,6 +1105,8 @@ function summary() {
 
 $("again").onclick = () => { qty = 5; update(); show("home"); };
 
+// Start App
+renderLineup();
 update();
 updateFeatured();
 </script>
