@@ -29,7 +29,8 @@ body {
   max-width: 480px;
   margin: auto;
   min-height: 100vh;
-  padding: 12px 12px 32px;
+  padding: 12px 10px 32px;
+  overflow-x: hidden;
 }
 
 /* Header */
@@ -247,9 +248,11 @@ body {
 }
 
 /* ========================================================
-   현황판 SCREEN (모바일 최적화 & 상점메타 삭제)
+   현황판 SCREEN (잘림 방지 반응형 그리드 & 모바일 최적화)
    ======================================================== */
 .board-container {
+  width: 100%;
+  box-sizing: border-box;
   background: #090c1d;
   border: 2px solid #282f55;
   border-radius: 16px;
@@ -257,7 +260,6 @@ body {
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
 }
 
-/* Clean Header without store meta */
 .board-header {
   background: linear-gradient(180deg, #181d3d 0%, #10132b 100%);
   border-bottom: 2px solid #2f365f;
@@ -286,12 +288,16 @@ body {
 .board-title-group {
   text-align: center;
   flex: 1;
+  min-width: 0;
 }
 .board-title-group h1 {
   font-size: 17px;
   font-weight: 900;
   color: #ffffff;
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .board-counter-group {
   text-align: right;
@@ -313,32 +319,40 @@ body {
 }
 .board-counter-group .counter-val strong { color: #ffdc38; }
 
-/* Pegboard Grid */
+/* Pegboard Grid — 잘림 방지 100% minmax(0, 1fr) */
 .board-peg-surface {
+  width: 100%;
+  box-sizing: border-box;
   background-color: #0b0e20;
   background-image: radial-gradient(#1c2240 1.5px, transparent 1.5px);
   background-size: 12px 12px;
-  padding: 10px 8px 14px;
+  padding: 8px 6px 12px;
 }
 
 .board-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 7px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Compact Mobile Board Card */
 .board-card {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   background: linear-gradient(135deg, #ffffff 0%, #f4f6fd 60%, #e6eefc 100%);
   border-radius: 9px;
   border: 1px solid #ffffff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
-  padding: 6px 7px;
+  padding: 5px 6px;
   color: #171a2e;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 68px;
+  min-height: 66px;
+  overflow: hidden;
 }
 .board-card.soldout {
   background: linear-gradient(135deg, #e7ebf3 0%, #d4dae6 100%);
@@ -347,13 +361,15 @@ body {
 .board-card-top {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  width: 100%;
+  min-width: 0;
 }
 
 /* Grade Medal */
 .grade-medal {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 30%, #fff2b2 0%, #d4af37 40%, #8f6a15 80%, #594008 100%);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
@@ -363,8 +379,8 @@ body {
   flex-shrink: 0;
 }
 .grade-medal-inner {
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 35%, #23273e 0%, #0d0f1b 100%);
   border: 1px solid #e5c365;
@@ -375,8 +391,8 @@ body {
   color: #ffdf7a;
   line-height: 1;
 }
-.grade-medal-inner .medal-letter { font-size: 12px; font-weight: 900; }
-.grade-medal-inner .medal-sub { font-size: 6px; font-weight: 800; }
+.grade-medal-inner .medal-letter { font-size: 10.5px; font-weight: 900; }
+.grade-medal-inner .medal-sub { font-size: 5.5px; font-weight: 800; }
 
 .grade-medal.last-one {
   background: radial-gradient(circle at 35% 30%, #ff8db7 0%, #e91e63 45%, #9c1040 85%, #5a0522 100%);
@@ -384,7 +400,7 @@ body {
 .grade-medal.last-one .grade-medal-inner {
   border-color: #ff8db7; color: #fff; background: #230814;
 }
-.grade-medal.last-one .medal-letter { font-size: 8px; font-weight: 1000; }
+.grade-medal.last-one .medal-letter { font-size: 7.5px; font-weight: 1000; }
 
 .grade-medal.double-chance {
   background: radial-gradient(circle at 35% 30%, #c49eff 0%, #6f42c1 45%, #3d1b7d 85%, #20084c 100%);
@@ -397,9 +413,10 @@ body {
 .board-card-info {
   flex: 1;
   min-width: 0;
+  overflow: hidden;
 }
 .board-card-title {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 900;
   color: #171b30;
   line-height: 1.2;
@@ -408,45 +425,50 @@ body {
   text-overflow: ellipsis;
 }
 .board-card-thumb {
-  width: 28px;
-  height: 28px;
+  width: 25px;
+  height: 25px;
   object-fit: contain;
   background: #fff;
-  border-radius: 5px;
+  border-radius: 4px;
   border: 1px solid #dae2f0;
   flex-shrink: 0;
 }
 
-/* Ticket Strip & Remain */
+/* Ticket Strip & Remain — Responsive */
 .board-card-bottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 4px;
-  background: rgba(228, 233, 245, 0.7);
+  gap: 3px;
+  background: rgba(228, 233, 245, 0.75);
   border-radius: 5px;
-  padding: 2px 5px;
+  padding: 2px 4px;
   margin-top: 4px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 .ticket-strip {
   display: flex;
   align-items: center;
-  gap: 1.5px;
+  gap: 1px;
   background: #121526;
   border-radius: 3px;
-  padding: 1.5px 2.5px;
+  padding: 1.5px 2px;
   flex-wrap: wrap;
-  max-width: 105px;
+  flex: 1;
+  min-width: 0;
 }
 .ticket-slot {
-  width: 8px;
-  height: 10px;
+  width: 6.5px;
+  height: 8.5px;
   border-radius: 1px;
-  font-size: 6.5px;
+  font-size: 5.5px;
   font-weight: 900;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 .ticket-slot.active {
   background: linear-gradient(180deg, #ff953f 0%, #f05a00 100%);
@@ -463,16 +485,17 @@ body {
   align-items: baseline;
   gap: 2px;
   flex-shrink: 0;
+  white-space: nowrap;
 }
-.remain-label { font-size: 7px; color: #6a7495; font-weight: 700; }
+.remain-label { font-size: 6.5px; color: #6a7495; font-weight: 700; }
 .remain-count {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 1000;
   color: #0b1a4a;
 }
 .remain-count.zero { color: #cc2233; }
 .sold-badge {
-  font-size: 8px;
+  font-size: 7.5px;
   font-weight: 900;
   color: #fff;
   background: #d32f2f;
@@ -507,12 +530,40 @@ body {
   border: 1px solid #3c456d;
 }
 
-/* Scratch & Summary */
+/* ========================================================
+   Scratch Box — 결과 사전 노출 방지(누출 차단 커버)
+   ======================================================== */
 #scratch .title, #summary .title { color: #fff; font-size: 22px; margin: 4px 0 8px; }
 #scratch .sub, #summary .sub { color: #9aa1bc; font-size: 12px; }
-.scratchbox { position: relative; margin-top: 10px; }
-.scratchbox img { display: block; width: 100%; height: 260px; object-fit: contain; background: #fff; border-radius: 14px; }
-.scratchbox canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; border-radius: 14px; z-index: 2; }
+
+.scratchbox {
+  position: relative;
+  margin-top: 10px;
+  background: #16192e; /* 캔버스 로딩 중 밑바탕 암전 */
+  border-radius: 14px;
+  overflow: hidden;
+  height: 260px;
+}
+.scratchbox img {
+  display: block;
+  width: 100%;
+  height: 260px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 14px;
+  opacity: 0; /* 캔버스 코팅이 완전히 칠해지기 전까지 100% 투명 숨김 */
+  transition: opacity .12s ease;
+}
+.scratchbox canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  border-radius: 14px;
+  z-index: 2; /* 캔버스가 항상 이미지 위에 완벽 밀착 */
+}
+
 .tag { display: inline-block; border-radius: 99px; background: #352d49; color: #fff; padding: 5px 10px; font-size: 11px; font-weight: 900; }
 .results { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; }
 .result { border: 1px solid #2e3557; background: #13172c; border-radius: 10px; padding: 8px; color: #fff; }
@@ -538,7 +589,11 @@ body {
 .btn:disabled { opacity: .45; }
 
 @media (max-width: 360px) {
-  .board-grid { grid-template-columns: 1fr; }
+  .app { padding: 10px 6px 24px; }
+  .board-peg-surface { padding: 6px 4px 10px; }
+  .board-grid { gap: 4px; }
+  .board-card { padding: 4px 4px; }
+  .board-card-title { font-size: 9.5px; }
 }
 </style>
 </head>
@@ -600,7 +655,7 @@ body {
 </section>
 
 <!-- ==============================================
-     SCREEN 2: 현황판 (상점메타 삭제 & 텍스트 2/3 축소)
+     SCREEN 2: 현황판 (잘림 방지 반응형)
      ============================================== -->
 <section id="board" class="screen">
   <div class="board-container">
@@ -631,7 +686,7 @@ body {
 </section>
 
 <!-- ==============================================
-     SCREEN 3: SCRATCH
+     SCREEN 3: SCRATCH (결과 사전 노출 100% 방지)
      ============================================== -->
 <section id="scratch" class="screen">
   <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -667,7 +722,6 @@ body {
 <script>
 /* ========================================================
    1. DATA INITIALIZATION & FALLBACK
-   images.js의 window.KUJI_DATA를 불러오며, 없을 경우 대비
    ======================================================== */
 const defaultData = {
   themes: {
@@ -703,7 +757,6 @@ const defaultData = {
   ]
 };
 
-// images.js 로드 여부 검사 및 데이터 바인딩
 const AppData = (window.KUJI_DATA && window.KUJI_DATA.themes) ? window.KUJI_DATA : defaultData;
 const themes = AppData.themes;
 const grades = AppData.grades;
@@ -755,7 +808,7 @@ function show(id) {
 }
 
 /* ========================================================
-   3. HOME SCREEN RENDER & CONTROLS
+   3. HOME SCREEN
    ======================================================== */
 function renderLineup() {
   const list = $("lineupList");
@@ -829,7 +882,7 @@ $("plus").onclick = () => {
 };
 
 /* ========================================================
-   4. 현황판 SCREEN RENDER (images.js 연동 & 2/3 컴팩트)
+   4. 현황판 RENDER (잘림 없는 minmax 반응형 카드)
    ======================================================== */
 function renderBoard() {
   const t = themes[theme];
@@ -907,7 +960,7 @@ function renderBoard() {
       <img class="board-card-thumb" src="${t.lastOne.image}" alt="LAST" onerror="this.src='${placeholder("L")}'">
     </div>
     <div class="board-card-bottom">
-      <span style="font-size:7.5px; color:#d81b60; font-weight:800;">마지막 1장 지급</span>
+      <span style="font-size:7px; color:#d81b60; font-weight:800; white-space:nowrap;">마지막 1장 지급</span>
       <div class="remain-box"><span class="remain-label">잔여</span><span class="remain-count" style="color:#d81b60">${loStatus}</span></div>
     </div>
   `;
@@ -927,7 +980,7 @@ function renderBoard() {
       <img class="board-card-thumb" src="${t.doubleChance.image}" alt="W" onerror="this.src='${placeholder("W")}'">
     </div>
     <div class="board-card-bottom">
-      <span style="font-size:7.5px; color:#72f7d1; font-weight:800;">추첨권</span>
+      <span style="font-size:7px; color:#72f7d1; font-weight:800; white-space:nowrap;">추첨권</span>
       <div class="remain-box"><span class="remain-label" style="font-size:7px;">추첨</span></div>
     </div>
   `;
@@ -955,7 +1008,7 @@ $("btnResetBox").onclick = () => {
 };
 
 /* ========================================================
-   5. SCRATCH ENGINE & RESULTS
+   5. SCRATCH ENGINE (결과 사전 노출 원천 차단)
    ======================================================== */
 $("pay").onclick = () => {
   const box = themeBoxes[theme];
@@ -991,39 +1044,70 @@ $("pay").onclick = () => {
 function begin() {
   if (idx >= results.length) { summary(); return; }
   current = results[idx];
+
+  // [차단 1] 화면 전환 전, 이전/새 상품 이미지와 텍스트를 즉시 100% 암전 은폐
+  const im = $("prizeImg");
+  im.style.opacity = "0";
+  im.src = "";
+
   $("prizeMeta").style.visibility = "hidden";
+  $("grade").textContent = "등급 미공개";
+  $("prizeName").textContent = "???";
   $("progress").textContent = (idx + 1) + " / " + results.length;
 
+  $("next").disabled = true;
+  $("next").textContent = (idx + 1 === results.length) ? "결과 보기" : "다음 티켓";
+
+  show("scratch");
+
+  // 화면이 렌더링된 직후 캔버스 불투명 코팅을 먼저 완성하고 이미지를 뒤에 배치
+  requestAnimationFrame(() => {
+    setupCanvas();
+  });
+}
+
+function setupCanvas() {
+  let can = $("scratchCanvas"), box = $("scratchbox");
+  let r = box.getBoundingClientRect();
+  let dpr = Math.max(1, window.devicePixelRatio || 1);
+
+  let w = r.width || box.clientWidth || 340;
+  let h = 260;
+
+  can.width = w * dpr;
+  can.height = h * dpr;
+  can.style.width = w + "px";
+  can.style.height = h + "px";
+
+  ctx = can.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  // [차단 2] 100% 완벽한 불투명 실버 메탈릭 코팅을 먼저 화면 전체에 도포
+  ctx.globalCompositeOperation = "source-over";
+  let grad = ctx.createLinearGradient(0, 0, w, h);
+  grad.addColorStop(0, "#c2c1be");
+  grad.addColorStop(0.5, "#ecebe8");
+  grad.addColorStop(1, "#b5b4ad");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.fillStyle = "#3e3a35";
+  ctx.textAlign = "center";
+  ctx.font = "900 19px sans-serif";
+  ctx.fillText("★ SCRATCH HERE ★", w / 2, h / 2 - 8);
+  ctx.font = "700 12px sans-serif";
+  ctx.fillStyle = "#5e5952";
+  ctx.fillText("화면을 문질러 당첨 결과를 확인하세요", w / 2, h / 2 + 16);
+
+  checked = false;
+
+  // [차단 3] 캔버스 코팅이 완전히 덮인 것을 확인한 뒤에야 상품 이미지를 캔버스 뒤(z-index: 1)에 안전 로딩
   const im = $("prizeImg");
   const fb = placeholder(current.key || "A");
   im.onerror = () => { im.onerror = null; im.src = fb; };
   im.src = current.image || fb;
-
-  $("next").disabled = true;
-  $("next").textContent = (idx + 1 === results.length) ? "결과 보기" : "다음 티켓";
-  show("scratch");
-  setTimeout(setupCanvas, 80);
-}
-
-function setupCanvas() {
-  let can = $("scratchCanvas"), box = $("scratchbox"), r = box.getBoundingClientRect(), dpr = Math.max(1, devicePixelRatio || 1);
-  can.width = r.width * dpr;
-  can.height = 260 * dpr;
-  can.style.height = "260px";
-  ctx = can.getContext("2d");
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-  ctx.globalCompositeOperation = "source-over";
-  ctx.fillStyle = "#c2c2c0";
-  ctx.fillRect(0, 0, r.width, 260);
-
-  ctx.fillStyle = "#4a4744";
-  ctx.textAlign = "center";
-  ctx.font = "900 18px sans-serif";
-  ctx.fillText("SCRATCH", r.width / 2, 125);
-  ctx.font = "12px sans-serif";
-  ctx.fillText("문질러서 확인", r.width / 2, 148);
-  checked = false;
+  // 캔버스 코팅 뒤에서 부드럽게 대기 (사용자는 오직 은색 코팅만 보임)
+  im.style.opacity = "1";
 }
 
 function pos(e) {
