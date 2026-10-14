@@ -47,6 +47,17 @@ body {
   font-weight: 900;
   letter-spacing: .12em;
   color: #fff;
+  cursor: pointer;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  transition: opacity .15s ease, transform .1s ease;
+}
+.brand:hover {
+  opacity: 0.85;
+}
+.brand:active {
+  transform: scale(0.97);
 }
 .top-actions {
   display: flex;
@@ -604,10 +615,7 @@ body {
 
 <!-- Header -->
 <div class="top">
-  <div class="brand">🎯 KUJI SCRATCH</div>
-  <div class="top-actions">
-    <button id="topBoardBtn" class="pill board-btn" type="button">📊 실시간 현황판</button>
-  </div>
+  <div class="brand" id="brandHomeBtn" role="button" tabindex="0" title="홈으로 이동">🎯 KUJI SCRATCH</div>
 </div>
 
 <!-- ==============================================
@@ -632,7 +640,6 @@ body {
 
   <div class="section-head">
     <h2>쿠지 라인업</h2>
-    <button class="pill" id="lineupBoardBtn" type="button">📊 현황판</button>
   </div>
 
   <div class="kuji-list" id="lineupList">
@@ -652,7 +659,7 @@ body {
       <span>결제 금액</span>
       <b id="total">₩ 25,000</b>
     </div>
-    <button id="pay" class="start-btn" type="button">시작하기 →</button>
+    <button id="pay" class="start-btn" type="button">쿠지 뽑으러 가기 →</button>
   </div>
 </section>
 
@@ -857,7 +864,7 @@ function update() {
   $("qty").textContent = qty;
   $("total").textContent = won(qty * unitPrice);
   $("pay").disabled = (rem === 0);
-  $("pay").textContent = (rem === 0) ? "완판 (새 판 필요)" : `${won(qty * unitPrice)} 시작하기 →`;
+  $("pay").textContent = (rem === 0) ? "완판 (새 판 필요)" : "쿠지 뽑으러 가기 →";
 
   kujisList.forEach(item => {
     const b = themeBoxes[item.id];
@@ -1001,9 +1008,8 @@ function renderBoard() {
   }
 }
 
+$("brandHomeBtn").onclick = () => show("home");
 $("boardBackBtn").onclick = () => show(lastScreen || "home");
-$("topBoardBtn").onclick = () => show("board");
-$("lineupBoardBtn").onclick = () => show("board");
 $("featuredBox").onclick = () => show("board");
 $("scratchToBoardBtn").onclick = () => show("board");
 $("summaryToBoardBtn").onclick = () => show("board");
